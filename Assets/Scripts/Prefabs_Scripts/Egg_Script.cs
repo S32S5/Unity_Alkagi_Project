@@ -8,13 +8,12 @@
  * - Set egg's velocity
  * - Return egg's color
  * 
- * @version 0.1, First verison
+ * @version 0.0.2, Code optimization
  * @author S3
- * @date 2023/12/28
+ * @date 2024/01/28
  */
 
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class Egg_Script : MonoBehaviour
 {
@@ -27,9 +26,7 @@ public class Egg_Script : MonoBehaviour
 
     private static float panOut = 4.5f;
 
-    /*
-     * Specifies
-     */
+    // Specifies
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -42,23 +39,17 @@ public class Egg_Script : MonoBehaviour
         EggLeavingPan();
     }
 
-    /*
-     * If egg leaves the pan, delete it
-     */
+    // If egg leaves the pan, delete it
     private void EggLeavingPan()
     {
         float eggX = transform.position.x;
         float eggY = transform.position.y;
 
         if (eggX >= panOut || eggX <= -panOut || eggY >= panOut || eggY <= -panOut)
-        {
-            GameObject.Find("Main_Director").GetComponent<EggControl_Script>().DestroyEgg(colorBool, gameObject);
-        }
+            GameObject.Find("InGame_Canvas").GetComponent<EggControl_Script>().DestroyEgg(colorBool, gameObject);
     }
 
-    /*
-     * If egg collides with another one, reflects and play SE
-     */
+    // If egg collides with another one, reflects and play SE
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (lastVelocity != Vector3.zero && collision.transform.GetComponent<Rigidbody2D>().velocity != Vector2.zero)

@@ -20,45 +20,43 @@ public class EndCurrentGameControl_Script : MonoBehaviour
 
     private InGame_Script ig_Script;
 
-    /*
-     * Specifies
-     */
+    // Specifies
+    private void Awake()
+    {
+        EndCurrentGame_Panel = GameObject.Find("EndCurrentGame_Panel");
+        EndCurrentGameYes_Button = GameObject.Find("EndCurrentGameYes_Button").GetComponent<Button>();
+        EndCurrentGameNo_Button = GameObject.Find("EndCurrentGameNo_Button").GetComponent<Button>();
+    }
+
+    // Specifies when game start
     private void Start()
     {
-        EndCurrentGame_Panel = GameObject.Find("InGame_Canvas").transform.Find("EndCurrentGame_Panel").gameObject;
-
-        GameObject EndCurrentGameButton_Panel = EndCurrentGame_Panel.transform.Find("EndCurrentGameButton_Panel").gameObject;
-        EndCurrentGameYes_Button = EndCurrentGameButton_Panel.transform.Find("EndCurrentGameYes_Button").GetComponent<Button>();
-        EndCurrentGameNo_Button = EndCurrentGameButton_Panel.transform.Find("EndCurrentGameNo_Button").GetComponent<Button>();
-
         EndCurrentGameYes_Button.GetComponent<Button>().onClick.AddListener(EndCurrentGame);
         EndCurrentGameNo_Button.GetComponent<Button>().onClick.AddListener(EndCurrentGameCancel);
 
         ig_Script = GetComponent<InGame_Script>();
     }
 
-    /*
-     * Show EndCurrentGame_Panel
-     */
+    // Init
+    public void Init()
+    {
+        EndCurrentGame_Panel.SetActive(false);
+    }
+
+    // Show EndCurrentGame_Panel
     public void ShowEndCurrentGame_Panel()
     {
         ig_Script.playGame = false;
         EndCurrentGame_Panel.SetActive(true);
     }
 
-    /*
-     * End current game
-     */
+    // End current game
     public void EndCurrentGame()
     {
-        ig_Script.SetActiveInGame_Panel(false);
-        EndCurrentGame_Panel.SetActive(false);
-        GetComponent<Main_Director_Script>().enableNewGameSetting();
+        GameObject.Find("Main_Director").GetComponent<Main_Director_Script>().NewGameSetting();
     }
 
-    /*
-     * End current game cancel
-     */
+    // End current game cancel
     public void EndCurrentGameCancel()
     {
         ig_Script.playGame = true;

@@ -8,9 +8,9 @@
  * - Return turn and turnEnd
  * - Displays current turn and turnTimeLimit
  * 
- * @version 0.1, First version
+ * @version 0.0.2, Code optimization
  * @author S3
- * @date 2023/12/28
+ * @date 2024/01/28
 */
 
 using UnityEngine;
@@ -28,28 +28,44 @@ public class TurnControl_Script : MonoBehaviour
     private InGame_Script ig_Script;
     private CameraControl_Script cc_Script;
 
-    /*
-     * Specifies
-     */
+    // Specifies
+    private void Awake()
+    {
+        BlackTurnDisplay_Panel = GameObject.Find("BlackTurnDisplay_Panel");
+        WhiteTurnDisplay_Panel = GameObject.Find("WhiteTurnDisplay_Panel");
+
+        CurrentTimeLimit_Text = GameObject.Find("CurrentTimeLimit_Text").GetComponent<Text>();
+
+    }
+
+    // Specifies when game start
     private void Start()
     {
-        GameObject InGame_Panel = GameObject.Find("InGame_Canvas").transform.Find("InGame_Panel").gameObject;
-        BlackTurnDisplay_Panel = InGame_Panel.transform.Find("BlackTurnDisplay_Panel").gameObject;
-        WhiteTurnDisplay_Panel = InGame_Panel.transform.Find("WhiteTurnDisplay_Panel").gameObject;
-
-        CurrentTimeLimit_Text = InGame_Panel.transform.Find("CurrentTimeLimit_Text").GetComponent<Text>();
-
         ig_Script = GetComponent<InGame_Script>();
         cc_Script = GetComponent<CameraControl_Script>();
     }
 
-    /*
-     * Decrease currentTimeLimit and turnEnd operation
-     */
+    // Decrease currentTimeLimit and turnEnd operation
     private void Update()
     {
         if (ig_Script.playGame && !turnEnd)
+        {
+            void DecreaseCurrentTimeLimit()
+            {
+                secondTimer += Time.deltaTime;
+                if (secondTimer >= 1)
+                {
+                    currentTimeLimit--;
+                    DisplaysCurrentTimeLimit();
+
+                    if (currentTimeLimit <= 0)
+                        turnEnd = true;
+
+                    secondTimer = Time.deltaTime;
+                }
+            }
             DecreaseCurrentTimeLimit();
+        }
         else if (ig_Script.playGame && turnEnd)
         {
             if (GetComponent<EggControl_Script>().GetAllEggsStop())
@@ -70,10 +86,6 @@ public class TurnControl_Script : MonoBehaviour
     public void InitTurn(bool firstTurn, int turnTimeLimit)
     {
         currentTurn = firstTurn;
-        if (currentTurn)
-            cc_Script.InitCamera(180);
-        else
-            cc_Script.InitCamera(0);
 
         this.turnTimeLimit = turnTimeLimit;
         currentTimeLimit = turnTimeLimit;
@@ -83,24 +95,6 @@ public class TurnControl_Script : MonoBehaviour
         DisplaysCurrentTimeLimit();
 
         turnEnd = false;
-    }
-
-    /*
-     * Decrease currentTimeLimit by 1
-     */
-    private void DecreaseCurrentTimeLimit()
-    {
-        secondTimer += Time.deltaTime;
-        if (secondTimer >= 1)
-        {
-            currentTimeLimit --;
-            DisplaysCurrentTimeLimit();
-
-            if (currentTimeLimit <= 0)
-                turnEnd = true;
-
-            secondTimer = Time.deltaTime;
-        }
     }
 
     /*
@@ -149,10 +143,8 @@ public class TurnControl_Script : MonoBehaviour
         return turnEnd;
     }
 
-    /*
-     * Displays the current turn
-     */
-    public void DisplaysCurrentTurn()
+    // Displays the current turn
+    private void DisplaysCurrentTurn()
     {
         if (currentTurn)
         {
@@ -166,10 +158,8 @@ public class TurnControl_Script : MonoBehaviour
         }
     }
 
-    /*
-     * Displays the current time limit
-     */
-    public void DisplaysCurrentTimeLimit()
+    // Displays the current time limit
+    private void DisplaysCurrentTimeLimit()
     {
         CurrentTimeLimit_Text.text = currentTimeLimit.ToString();
     }

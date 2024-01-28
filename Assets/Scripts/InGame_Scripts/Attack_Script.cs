@@ -1,9 +1,9 @@
 /**
  * Manages related to attack.
  * 
- * @version 0.1, First version
+ * @version 0.2, Code optimization
  * @author S3
- * @date 2023/12/28
+ * @date 2024/01/28
 */
 
 using UnityEngine;
@@ -25,19 +25,20 @@ public class Attack_Script : MonoBehaviour
     private InGame_Script ig_Script;
     private TurnControl_Script tc_Script;
 
-    /*
-     * Specifies
-     */
-    private void Start()
+    // Specifies
+    private void Awake()
     {
-        GameObject InGame_Panel = GameObject.Find("InGame_Canvas").transform.Find("InGame_Panel").gameObject;
-        AttackPowerGage = InGame_Panel.transform.Find("AttackPowerGage").gameObject;
-        AttackPowerGage.SetActive(false);
-
         Main_Camera = GameObject.Find("Main_Camera").GetComponent<Camera>();
 
-        ig_Script = gameObject.GetComponent<InGame_Script>();
-        tc_Script = gameObject.GetComponent<TurnControl_Script>();
+        AttackPowerGage = GameObject.Find("AttackPowerGage").gameObject;
+        AttackPowerGage.SetActive(false);
+    }
+
+    // Specifies when game start
+    private void Start()
+    {
+        ig_Script = GetComponent<InGame_Script>();
+        tc_Script = GetComponent<TurnControl_Script>();
     }
 
     private void Update()
@@ -62,9 +63,7 @@ public class Attack_Script : MonoBehaviour
         }
     }
 
-    /*
-     * Set mousePoint
-     */
+    // Set mousePoint
     private void IfMouseButtonDown()
     {
         if (Input.GetMouseButtonDown(0))
@@ -74,9 +73,7 @@ public class Attack_Script : MonoBehaviour
         }
     }
 
-    /*
-     * Set AttackPowerGage's active, size and rotation
-     */
+    // Set AttackPowerGage's active, size and rotation
     private void IfMouseButtonClick()
     {
         if (Input.GetMouseButton(0))
@@ -87,9 +84,7 @@ public class Attack_Script : MonoBehaviour
         }
     }
 
-    /*
-     * Set attack power gage is active or not
-     */
+    // Set attack power gage is active or not
     private void SetAttackPowerGageActive()
     {
         rangeCircleX = mousePosition.x - AttackPowerGage.transform.position.x;
@@ -102,9 +97,7 @@ public class Attack_Script : MonoBehaviour
             AttackPowerGage.SetActive(false);
     }
 
-    /*
-     * Set attack power gage's size
-     */
+    // Set attack power gage's size
     private void SetAttackPowerGageSize()
     {
         attackPowerGageSize = Mathf.Sqrt(rangeChecker) + 5;
@@ -113,9 +106,7 @@ public class Attack_Script : MonoBehaviour
         AttackPowerGage.GetComponent<RectTransform>().sizeDelta = new Vector2(25, attackPowerGageSize);
     }
 
-    /*
-     * Set attack power gage's rotation
-     */
+    // Set attack power gage's rotation
     private void SetAttackPowerGageRotation()
     {
         float angle = (Mathf.Atan2(rangeCircleX, rangeCircleY) * Mathf.Rad2Deg - 180);
@@ -123,9 +114,7 @@ public class Attack_Script : MonoBehaviour
         hit.transform.transform.rotation = Quaternion.AngleAxis(angle - Main_Camera.transform.eulerAngles.z, Vector3.back);
     }
 
-    /*
-     * Shoots egg
-     */
+    // Shoot egg
     private void IfMouseButtonUp()
     {
         if (Input.GetMouseButtonUp(0))

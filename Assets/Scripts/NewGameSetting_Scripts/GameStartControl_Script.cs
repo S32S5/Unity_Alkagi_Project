@@ -6,7 +6,7 @@
  * - Send NewGameSetting error message
  * - Return GameSettingError_Panel is active
  * 
- * @version 0.1, First version
+ * @version 0.0.2, First version
  * @author S3
  * @date 2023/12/27
 */
@@ -20,26 +20,26 @@ public class GameStartControl_Script : MonoBehaviour
     private Text GameSettingError_Text;
     private Button GameStart_Button, GameSettingErrorCheck_Button;
 
-    /*
-     * Specifies
-     */
+    // Specifies
+    private void Awake()
+    {
+        GameSettingError_Panel = GameObject.Find("GameSettingError_Panel");
+        GameSettingError_Text = GameObject.Find("GameSettingError_Text").GetComponent<Text>();
+        GameStart_Button = GameObject.Find("GameStart_Button").GetComponent<Button>();
+
+        GameSettingErrorCheck_Button = GameObject.Find("GameSettingErrorCheck_Button").GetComponent<Button>();
+    }
+
+    // Specifies when game start
     private void Start()
     {
-        GameObject NewGame_Canvas = GameObject.Find("NewGame_Canvas").gameObject;
-        GameSettingError_Panel = NewGame_Canvas.transform.Find("GameSettingError_Panel").gameObject;
-        
-        GameSettingError_Text = GameSettingError_Panel.transform.Find("GameSettingError_Text").GetComponent<Text>();
-
-        GameStart_Button = NewGame_Canvas.transform.Find("NewGameSetting_Panel").transform.Find("GameStart_Button").GetComponent<Button>();
+        GameSettingError_Panel.SetActive(false);
         GameStart_Button.onClick.AddListener(GameStart);
 
-        GameSettingErrorCheck_Button = GameSettingError_Panel.transform.Find("GameSettingErrorCheck_Button").GetComponent<Button>();
         GameSettingErrorCheck_Button.onClick.AddListener(NewGameSettingErrorMessageCheck);
     }
 
-    /*
-     * Check NewGameSetting and starts game
-     */
+    // Check NewGameSetting and starts game
     private void GameStart()
     {
         // Check turnTimeLimit is null or 5 or less
@@ -48,10 +48,7 @@ public class GameStartControl_Script : MonoBehaviour
         else if(GetComponent<TurnTimeLimitControl_Script>().GetTurnTimeLimit() < 5)
             ShowNewGameSettingErrorMessage("수 시간 제한을 5에서 999999999사이로 입력해 주세요"); // "Please enter a time limit of 5 to 999999999"
         else
-        {
-            GetComponent<NewGameSetting_Script>().SetNewGameSetting_Panel(false);
-            GetComponent<Main_Director_Script>().enableInGame();
-        }
+            GameObject.Find("Main_Director").GetComponent<Main_Director_Script>().InGame();
     }
 
     /*
@@ -65,9 +62,7 @@ public class GameStartControl_Script : MonoBehaviour
         GameSettingError_Text.text = message;
     }
 
-    /*
-     * GameSettingError_Panel Setactive(false)
-     */
+    // GameSettingError_Panel Setactive(false)
     public void NewGameSettingErrorMessageCheck()
     {
         GameSettingError_Panel.SetActive(false);

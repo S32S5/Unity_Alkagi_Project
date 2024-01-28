@@ -7,9 +7,9 @@
  * - FirstTurn checkbox behavior
  * - Return firstTurn
  * 
- * @version 0.1, First version
+ * @version 0.0.2, Code optimization
  * @author S3
- * @date 2023/12/27
+ * @date 2024/01/28
 */
 
 using UnityEngine;
@@ -22,10 +22,8 @@ public class FirstTurnControl_Script : MonoBehaviour
     private GameObject BlackFirstTurn_Button, WhiteFirstTurn_Button;
     private Sprite UICheckBoxOn_Button, UICheckBoxOff_Button;
 
-    /*
-     * Specifies
-     */
-    private void Start()
+    // Specifies
+    private void Awake()
     {
         GameObject BlackWhiteFirstTurn_Panel = GameObject.Find("NewGame_Canvas").transform.Find("NewGameSetting_Panel").transform.Find("FirstTurn_Panel").transform.Find("BlackWhiteFirstTurn_Panel").gameObject;
         GameObject BlackFirstTurn_Panel = BlackWhiteFirstTurn_Panel.transform.Find("BlackFirstTurn_Panel").gameObject;
@@ -42,9 +40,7 @@ public class FirstTurnControl_Script : MonoBehaviour
         UpdateFirstTurn_Check();
     }
 
-    /*
-     * Updates the CheckBox to current firstTurn
-     */
+    // Update the CheckBox to current firstTurn
     public void UpdateFirstTurn_Check()
     {
         if (firstTurn)
@@ -59,27 +55,21 @@ public class FirstTurnControl_Script : MonoBehaviour
         }
     }
 
-    /*
-     * Sets firstTurn to false
-     */
+    // Set firstTurn to false
     public void BlackFirstTurn_Button_Pressed()
     {
         firstTurn = false;
         UpdateFirstTurn_Check();
     }
 
-    /*
-     * Sets firstTurn to true
-     */
+    // Set firstTurn to true
     public void WhiteFirstTurn_Button_Pressed()
     {
         firstTurn = true;
         UpdateFirstTurn_Check();
     }
 
-    /*
-     * Return firstTurn
-     */
+    // Return firstTurn
     public bool GetFirstTurn()
     {
         return firstTurn;

@@ -5,9 +5,9 @@
  * - Init Ingame
  * - Set InGame_Panel active or not
  * 
- * @version 0.1, First version
+ * @version 0.0.2, Code optimization
  * @author S3
- * @date 2023/12/27
+ * @date 2024/01/28
 */
 
 using UnityEngine;
@@ -16,20 +16,15 @@ public class InGame_Script : MonoBehaviour
 {
     public bool playGame;
 
-    private GameObject InGame_Panel;
-
     private EggControl_Script ec_Script;
     private TurnControl_Script tc_Script;
+    private CameraControl_Script cc_Script;
     public EndCurrentGameControl_Script ecgc_Script;
     public GameResultControl_Script grc_Script;
 
-    /*
-     * Specifies
-     */
+    // Specifies
     private void Awake()
     {
-        InGame_Panel = GameObject.Find("InGame_Canvas").transform.Find("InGame_Panel").gameObject;
-
         gameObject.AddComponent<EggControl_Script>();
         gameObject.AddComponent<TurnControl_Script>();
         gameObject.AddComponent<Attack_Script>();
@@ -37,37 +32,39 @@ public class InGame_Script : MonoBehaviour
         gameObject.AddComponent<EndCurrentGameControl_Script>();
         gameObject.AddComponent<GameResultControl_Script>();
 
-        ec_Script = gameObject.GetComponent<EggControl_Script>();
-        tc_Script = gameObject.GetComponent<TurnControl_Script>();
-        ecgc_Script = gameObject.GetComponent<EndCurrentGameControl_Script>();
-        grc_Script = gameObject.GetComponent<GameResultControl_Script>();
-
-        gameObject.GetComponent<InGame_Script>().enabled = false;
+        ec_Script = GetComponent<EggControl_Script>();
+        tc_Script = GetComponent<TurnControl_Script>();
+        cc_Script = GetComponent<CameraControl_Script>();
+        ecgc_Script = GetComponent<EndCurrentGameControl_Script>();
+        grc_Script = GetComponent<GameResultControl_Script>();
     }
 
-    /*
-     * Init and start game when OnEnable
-     */
-    private void OnEnable()
+    // Esc
+    private void Update()
     {
-        int initialEggNumber = GetComponent<InitialEggNumberControl_Script>().GetInitialEggNumber();
-        bool firstTurn = GetComponent<FirstTurnControl_Script>().GetFirstTurn();
-        int turnTimeLimit = GetComponent<TurnTimeLimitControl_Script>().GetTurnTimeLimit();
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (ecgc_Script.EndCurrentGame_Panel_EnDis())
+                ecgc_Script.EndCurrentGameCancel();
+            else if (grc_Script.GetGameResult_Panel_EnDis())
+                grc_Script.CheckGameResult();
+            else
+                ecgc_Script.ShowEndCurrentGame_Panel();
+        }
+    }
 
+    // Init
+    public void Init(int initialEggNumber, bool firstTurn, int turnTimeLimit)
+    {
         ec_Script.InitEggs(initialEggNumber);
         tc_Script.InitTurn(firstTurn, turnTimeLimit);
+        if (firstTurn)
+            cc_Script.InitCamera(180);
+        else
+            cc_Script.InitCamera(0);
+        ecgc_Script.Init();
+        grc_Script.Init();
 
-        InGame_Panel.SetActive(true);
         playGame = true;
-    }
-
-    /*
-     * Set InGame_Panel active or not
-     * 
-     * @param bool true or false
-     */
-    public void SetActiveInGame_Panel(bool onOff)
-    {
-        InGame_Panel.SetActive(onOff);
     }
 }

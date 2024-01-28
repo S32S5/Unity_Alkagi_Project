@@ -5,9 +5,10 @@
  * - Quit game
  * - Return QuitGame_Panel is active
  * 
- * @version 0.1, First version
+ * @version 0.0.2
+ *  -Code optimization
  * @author S3
- * @date 2023/12/27
+ * @date 2024/01/28
 */
 
 using UnityEngine;
@@ -15,46 +16,38 @@ using UnityEngine.UI;
 
 public class QuitGameControl_Script : MonoBehaviour
 {
-    private GameObject QuitGame_Panel;
+    private GameObject QuitGameBackground_Panel;
     private Button QuitGameYes_Button, QuitGameNo_Button;
 
-    /*
-     * Specifies
-     */
-    private void Start()
+    // Specifies
+    private void Awake()
     {
-        QuitGame_Panel = GameObject.Find("NewGame_Canvas").transform.Find("QuitGame_Panel").gameObject;
+        QuitGameBackground_Panel = GameObject.Find("QuitGameBackground_Panel");
 
-        GameObject QuitGameButton_Panel = QuitGame_Panel.transform.Find("QuitGameButton_Panel").gameObject;
-        QuitGameYes_Button = QuitGameButton_Panel.transform.Find("QuitGameYes_Button").GetComponent<Button>();
-        QuitGameNo_Button = QuitGameButton_Panel.transform.Find("QuitGameNo_Button").GetComponent<Button>();
-
+        QuitGameYes_Button = GameObject.Find("QuitGameYes_Button").GetComponent<Button>();
         QuitGameYes_Button.onClick.AddListener(QuitGame);
+        QuitGameNo_Button = GameObject.Find("QuitGameNo_Button").GetComponent<Button>();
         QuitGameNo_Button.onClick.AddListener(QuitGameCancel);
+
+        QuitGameBackground_Panel.SetActive(false);
     }
 
-    /*
-     * Show QuitGame_Panel
-     */
+    // Show QuitGame_Panel
     public void ShowQuitGame_Panel()
     {
-        QuitGame_Panel.SetActive(true);
+        QuitGameBackground_Panel.SetActive(true);
     }
 
-    /*
-     * Quit game
-     */
+    // Quit game
     public void QuitGame()
     {
         Application.Quit();
     }
 
-    /*
-     * Quit game cancel
-     */
+    // Quit game cancel
     public void QuitGameCancel()
     {
-        QuitGame_Panel.SetActive(false);
+        QuitGameBackground_Panel.SetActive(false);
     }
 
     /*
@@ -64,6 +57,6 @@ public class QuitGameControl_Script : MonoBehaviour
      */
     public bool QuitGame_Panel_EnDis()
     {
-        return QuitGame_Panel.activeSelf;
+        return QuitGameBackground_Panel.activeSelf;
     }
 }

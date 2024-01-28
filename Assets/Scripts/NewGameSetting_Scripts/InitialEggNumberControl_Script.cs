@@ -6,9 +6,9 @@
  * - Decreases, increases initialEggNumber
  * - Return initialEggNumber
  * 
- * @version 0.1, First version
+ * @version 0.0.2, Code optimization
  * @author S3
- * @date 2023/12/27
+ * @date 2024/01/28
 */
 
 using UnityEngine;
@@ -21,13 +21,9 @@ public class InitialEggNumberControl_Script : MonoBehaviour
     private Text InitialEggNumberSettedNumber_Text;
     private Button InitialEggNumberDecrease_Button, InitialEggNumberIncrease_Button;
 
-    /*
-     * Specifies
-     */
-    private void Start()
+    // Specifies
+    private void Awake()
     {
-        initialEggNumber = 4;
-
         GameObject InitialEggNumberSetting_Panel = GameObject.Find("NewGame_Canvas").transform.Find("NewGameSetting_Panel").transform.Find("InitialEggNumber_Panel").transform.Find("InitialEggNumberSetting_Panel").gameObject;
         InitialEggNumberSettedNumber_Text = InitialEggNumberSetting_Panel.transform.Find("InitialEggSettedNumber_Text").GetComponent<Text>();
         InitialEggNumberDecrease_Button = InitialEggNumberSetting_Panel.transform.Find("InitialEggNumberDecrease_Button").GetComponent<Button>();
@@ -35,21 +31,22 @@ public class InitialEggNumberControl_Script : MonoBehaviour
 
         InitialEggNumberDecrease_Button.onClick.AddListener(DecreasesInitialEggNumber);
         InitialEggNumberIncrease_Button.onClick.AddListener(IncreasesInitialEggNumber);
+    }
 
+    // Specifies when game start
+    private void Start()
+    {
+        initialEggNumber = 4;
         UpdateInitialEggSettedNumber_Text();
     }
 
-    /*
-    * Updates text of InitialEggNumberSettedNumber_Text
-    */
+    // Update text of InitialEggNumberSettedNumber_Text
     private void UpdateInitialEggSettedNumber_Text()
     {
         InitialEggNumberSettedNumber_Text.text = initialEggNumber.ToString();
     }
 
-    /*
-     * Decreases initialEggNumber by 1
-     */
+    // Decreases initialEggNumber by 1
     public void DecreasesInitialEggNumber()
     {
         if (initialEggNumber != 1)
@@ -59,9 +56,7 @@ public class InitialEggNumberControl_Script : MonoBehaviour
         }
     }
 
-    /*
-     * Increases initialEggNumber by 1
-     */
+    // Increases initialEggNumber by 1
     public void IncreasesInitialEggNumber()
     {
         if (initialEggNumber != 7)
@@ -72,6 +67,8 @@ public class InitialEggNumberControl_Script : MonoBehaviour
     }
 
     /*
+     * Get initialEggNumber
+     * 
      * @return initialEggNumber
      */
     public int GetInitialEggNumber()

@@ -5,9 +5,9 @@
  * - Check turnTimeLimit is null
  * - Return turnTimeLimit of int type
  * 
- * @version 0.1, First version
+ * @version 0.2, Code optimization
  * @author S3
- * @date 2023/12/24
+ * @date 2023/01/28
 */
 
 using UnityEngine;
@@ -17,12 +17,18 @@ public class TurnTimeLimitControl_Script : MonoBehaviour
 {
     private InputField TurnTimeLimit_InputField;
 
-    /*
-     * Specifies
-     */
-    private void Start()
+    // Specifies
+    private void Awake()
     {
-        TurnTimeLimit_InputField = GameObject.Find("NewGame_Canvas").transform.Find("NewGameSetting_Panel").transform.Find("TurnTimeLimit_Panel").transform.Find("TurnTimeLimit_InputField").GetComponent<InputField>();
+        TurnTimeLimit_InputField = GameObject.Find("TurnTimeLimit_Panel").transform.Find("TurnTimeLimit_InputField").GetComponent<InputField>();
+        TurnTimeLimit_InputField.onValueChanged.AddListener(delegate { LimitTurnTimeLimit_InputField(); });
+    }
+
+    // Limit TurnTimeLimit_InputField is "-", "0"
+    private void LimitTurnTimeLimit_InputField()
+    {
+        if (TurnTimeLimit_InputField.text.Equals("-") || TurnTimeLimit_InputField.text.Equals("0"))
+            TurnTimeLimit_InputField.text = "";
     }
 
     /*

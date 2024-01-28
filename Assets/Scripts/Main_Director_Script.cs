@@ -1,57 +1,48 @@
 /**
  * Manages progress of the game
  * 
- * @version 0.1, First version
+ * @version 0.2
+ *  - Delete shortcut key script
+ *  - Code optimization
  * @author S3
- * @date 2023/12/22
+ * @date 2024/01/28
 */
 
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Main_Director_Script : MonoBehaviour
 {
-    // Scripts
-    private NewGameSetting_Script ngss;
-    private InGame_Script igs;
+    private GameObject NewGame_Canvas, InGame_Canvas;
 
-    /*
-     * Specifies
-     */
+    // Specifies
     private void Awake()
     {
-        gameObject.AddComponent<ShortCutKey_Script>();
-
-        ngss = gameObject.GetComponent<NewGameSetting_Script>();
-        igs = gameObject.GetComponent<InGame_Script>();
+        NewGame_Canvas = GameObject.Find("NewGame_Canvas");
+        InGame_Canvas = GameObject.Find("InGame_Canvas");
     }
 
-    /*
-     * Enable NewGameSetting and disable InGame when game start
-     */
+    // Start Game
     private void Start()
     {
-        enableNewGameSetting();
+        NewGameSetting();
     }
 
-
-    /*
-     * Close InGame and proceed to NewGameSetting
-     */
-    public void enableNewGameSetting()
+    // Close InGame and proceed to NewGameSetting
+    public void NewGameSetting()
     {
-        igs.enabled = false;
-        ngss.enabled = true;
+        InGame_Canvas.SetActive(false);
+        NewGame_Canvas.SetActive(true);
     }
 
-
-    /*
-     * Close NewGameSetting and proceed to InGame
-     */
-    public void enableInGame()
+    // Close NewGameSetting and proceed to InGame
+    public void InGame()
     {
-        ngss.enabled = false;
-        igs.enabled = true;
+        int initialEggNumber = NewGame_Canvas.GetComponent<InitialEggNumberControl_Script>().GetInitialEggNumber();
+        bool firstTurn = NewGame_Canvas.GetComponent<FirstTurnControl_Script>().GetFirstTurn();
+        int turnTimeLimit = NewGame_Canvas.GetComponent<TurnTimeLimitControl_Script>().GetTurnTimeLimit();
+
+        NewGame_Canvas.SetActive(false);
+        InGame_Canvas.SetActive(true);
+        InGame_Canvas.GetComponent<InGame_Script>().Init(initialEggNumber, firstTurn, turnTimeLimit);
     }
 }

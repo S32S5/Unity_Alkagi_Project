@@ -6,9 +6,9 @@
  * - Init camera
  * - Update camera rotation
  * 
- * @version 0.1, First version
+ * @version 0.1, Code optimization
  * @author S3
- * @date 2023/12/28
+ * @date 2024/01/28
 */
 
 using UnityEngine;
@@ -24,13 +24,15 @@ public class CameraControl_Script : MonoBehaviour
     private RaycastHit2D hit;
     private static float cameraRotationSpeed = 0.05f;
 
-    /*
-     * Specifies
-     */
+    // Specifies
+    private void Awake()
+    {
+        Main_Camera = GameObject.Find("Main_Camera").GetComponent<Camera>();
+    }
+
+    // Specifies when game start
     private void Start()
     {
-        Main_Camera = GameObject.Find("Main_Camera").GetComponent<Camera>(); ;
-
         ig_Script = GetComponent<InGame_Script>();
         tc_Script = GetComponent<TurnControl_Script>();
     }
@@ -44,9 +46,7 @@ public class CameraControl_Script : MonoBehaviour
         }
     }
 
-    /*
-     * Set mousePositionStart
-     */
+    // Set mousePositionStart
     private void IfMouseButtonDown()
     {
         if (Input.GetMouseButtonDown(0))
@@ -57,9 +57,7 @@ public class CameraControl_Script : MonoBehaviour
         }
     }
 
-    /*
-     * Rotate camera using mouse
-     */
+    // Rotate camera using mouse
     private void IfMouseButtonClick()
     {
         if (Input.GetMouseButton(0))

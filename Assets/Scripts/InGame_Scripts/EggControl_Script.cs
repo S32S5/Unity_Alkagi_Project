@@ -7,9 +7,9 @@
  * - Destroy egg
  * - Clear before game eggs
  * 
- * @version 0.1, First version
+ * @version 0.0.2, Code optimization
  * @author S3
- * @date 2023/12/28
+ * @date 2024/01/28
 */
 
 using System.Collections.Generic;
@@ -18,36 +18,36 @@ using UnityEngine;
 public class EggControl_Script : MonoBehaviour
 {
     private int initialEggNumber;
-    private List<GameObject> blackEggs, whiteEggs;
+    private List<GameObject>[] eggs = new List<GameObject>[2];
 
     private GameObject BlackEgg_Prefab, WhiteEgg_Prefab;
 
     public InGame_Script ig_Script;
     public GameResultControl_Script grc_Script;
 
-    /*
-     * Specifies
-     */
-    private void Start()
+    // Specifies
+    private void Awake()
     {
-        blackEggs = new List<GameObject>();
-        whiteEggs = new List<GameObject>();
+        for(int i = 0; i < 2; i++)
+            eggs[i] = new List<GameObject> ();
 
         BlackEgg_Prefab = Resources.Load<GameObject>("Prefabs/BlackEgg_Prefab");
         WhiteEgg_Prefab = Resources.Load<GameObject>("Prefabs/WhiteEgg_Prefab");
+    }
 
+    // Specifies when game start
+    private void Start()
+    {
         ig_Script = GetComponent<InGame_Script>();
         grc_Script = GetComponent<GameResultControl_Script>();
     }
 
-    /*
-     * Check a list where the number of eggs is 0
-     */
+    // Check a list where the number of eggs is 0
     private void Update()
     {
         if (ig_Script.playGame)
         {
-            if (blackEggs.Count == 0 || whiteEggs.Count == 0)
+            if (eggs[0].Count == 0 || eggs[1].Count == 0)
             {
                 ig_Script.playGame = false;
                 grc_Script.ShowGameResult();
@@ -64,29 +64,36 @@ public class EggControl_Script : MonoBehaviour
     {
         this.initialEggNumber = initialEggNumber;
 
-        ClearBeforeGameEggs();
-        SpawnEggs();
-    }
+        void ClearBeforeGameEggs()
+        { 
+            for(int i = 0; i < 2; i++)
+            {
+                foreach (GameObject egg in eggs[i])
+                    Destroy(egg);
 
-    /*
-     * Spawn Eggs as many as initialEggNumber
-     */
-    private void SpawnEggs()
-    {
-        List<Vector2> blackSpawnLocations = SetEggsSpawnLocation(1);
-        List<Vector2> whiteSpawnLocations = SetEggsSpawnLocation(-1);
-
-        // Spawns Eggs
-        for (int i = 0; i < initialEggNumber; i++)
-        {
-            GameObject newBlackEgg = Instantiate(BlackEgg_Prefab, blackSpawnLocations[i], Quaternion.identity);
-            newBlackEgg.GetComponent<Egg_Script>().SetEggColor(false);
-            blackEggs.Add(newBlackEgg);
-
-            GameObject newWhiteEgg = Instantiate(WhiteEgg_Prefab, whiteSpawnLocations[i], Quaternion.identity);
-            newWhiteEgg.GetComponent<Egg_Script>().SetEggColor(true);
-            whiteEggs.Add(newWhiteEgg);
+                eggs[i].Clear();
+            }
         }
+        ClearBeforeGameEggs();
+
+        void SpawnEggs()
+        {
+            List<Vector2> blackSpawnLocations = SetEggsSpawnLocation(1);
+            List<Vector2> whiteSpawnLocations = SetEggsSpawnLocation(-1);
+
+            // Spawns Eggs
+            for (int i = 0; i < initialEggNumber; i++)
+            {
+                GameObject newBlackEgg = Instantiate(BlackEgg_Prefab, blackSpawnLocations[i], Quaternion.identity);
+                newBlackEgg.GetComponent<Egg_Script>().SetEggColor(false);
+                eggs[0].Add(newBlackEgg);
+
+                GameObject newWhiteEgg = Instantiate(WhiteEgg_Prefab, whiteSpawnLocations[i], Quaternion.identity);
+                newWhiteEgg.GetComponent<Egg_Script>().SetEggColor(true);
+                eggs[1].Add(newWhiteEgg);
+            }
+        }
+        SpawnEggs();
     }
 
     /*
@@ -137,8 +144,8 @@ public class EggControl_Script : MonoBehaviour
         bool allStop = true;
 
         List<GameObject> integratedEggs = new List<GameObject>();
-        integratedEggs.AddRange(blackEggs);
-        integratedEggs.AddRange(whiteEggs);
+        integratedEggs.AddRange(eggs[0]);
+        integratedEggs.AddRange(eggs[1]);
         foreach (GameObject egg in integratedEggs)
             if (egg.GetComponent<Rigidbody2D>().velocity != Vector2.zero)
                 allStop = false;
@@ -154,9 +161,9 @@ public class EggControl_Script : MonoBehaviour
     public void DestroyEgg(bool color, GameObject egg)
     {
         if (color)
-            whiteEggs.Remove(egg);
+            eggs[1].Remove(egg);
         else
-            blackEggs.Remove(egg);
+            eggs[0].Remove(egg);
 
         Destroy(egg);
     }
@@ -170,24 +177,8 @@ public class EggControl_Script : MonoBehaviour
     public int GetEggsCount(bool color)
     {
         if(color)
-            return whiteEggs.Count;
+            return eggs[1].Count;
         else
-            return blackEggs.Count;
-    }
-
-    /*
-     * Clear eggs used previous game
-     */
-    public void ClearBeforeGameEggs()
-    {
-        List<GameObject> integratedEggs = new List<GameObject>();
-        integratedEggs.AddRange(blackEggs);
-        integratedEggs.AddRange(whiteEggs);
-
-        foreach (GameObject egg in integratedEggs)
-            Destroy(egg);
-
-        blackEggs.Clear();
-        whiteEggs.Clear();
+            return eggs[0].Count;
     }
 }
