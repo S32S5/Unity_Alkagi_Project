@@ -134,7 +134,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.25
+  m_Radius: 0.255
 --- !u!50 &-8135381374117872836
 Rigidbody2D:
   serializedVersion: 4
@@ -145,10 +145,10 @@ Rigidbody2D:
   m_GameObject: {fileID: 6556210611448894205}
   m_BodyType: 0
   m_Simulated: 1
-  m_UseFullKinematicContacts: 0
+  m_UseFullKinematicContacts: 1
   m_UseAutoMass: 0
-  m_Mass: 0.75
-  m_LinearDrag: 1
+  m_Mass: 0.0001
+  m_LinearDrag: 0
   m_AngularDrag: 0
   m_GravityScale: 0
   m_Material: {fileID: 0}

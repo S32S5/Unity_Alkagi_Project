@@ -1,7 +1,8 @@
 /**
  * Manages related to attack.
  * 
- * @version 0.2, Code optimization
+ * @version 0.3
+ * - Code optimization
  * @author S3
  * @date 2024/01/28
 */
@@ -20,7 +21,6 @@ public class Attack_Script : MonoBehaviour
     private float attackPowerGageSize;
 
     private static float attackPowerGageMin = 20, attackPowerGageMax = 185;
-    private static float maxSpeed = 25;
 
     private InGame_Script ig_Script;
     private TurnControl_Script tc_Script;
@@ -120,8 +120,9 @@ public class Attack_Script : MonoBehaviour
         if (Input.GetMouseButtonUp(0))
             if (rangeChecker > Mathf.Pow(attackPowerGageMin, 2))
             {
-                float speed = (attackPowerGageSize / attackPowerGageMax) * maxSpeed;
-                hit.transform.gameObject.GetComponent<Egg_Script>().SetEggMove(speed);
+                float powerGagePercentage = attackPowerGageSize / attackPowerGageMax;
+                hit.transform.gameObject.GetComponent<Egg_Script>().SetEggVelocity(powerGagePercentage);
+
                 hit = new RaycastHit2D();
                 AttackPowerGage.SetActive(false);
                 tc_Script.SetTurnEnd(true);

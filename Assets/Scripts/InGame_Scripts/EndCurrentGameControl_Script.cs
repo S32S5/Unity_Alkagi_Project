@@ -5,9 +5,10 @@
  * - End current game
  * - Return EndCurrentGame_Panel is active
  * 
- * @version 0.1, First version
+ * @version 0.3
+ * - Changed to move to main when the game ends
  * @author S3
- * @date 2023/12/28
+ * @date 2023/02/21
 */
 
 using UnityEngine;
@@ -53,7 +54,7 @@ public class EndCurrentGameControl_Script : MonoBehaviour
     // End current game
     public void EndCurrentGame()
     {
-        GameObject.Find("Main_Director").GetComponent<Main_Director_Script>().NewGameSetting();
+        GameObject.Find("Scene_Director").GetComponent<Scene_Director_Script>().MainOn();
     }
 
     // End current game cancel
@@ -66,9 +67,9 @@ public class EndCurrentGameControl_Script : MonoBehaviour
     /*
      * Return EndCurrentGame_Panel is active
      * 
-     * @return true or false
+     * @return bool EndCurrentGame_Panel.activeSelf
      */
-    public bool EndCurrentGame_Panel_EnDis()
+    public bool EndCurrentGame_Panel_IsOn()
     {
         return EndCurrentGame_Panel.activeSelf;
     }

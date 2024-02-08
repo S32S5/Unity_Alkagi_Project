@@ -5,9 +5,10 @@
  * - Init Ingame
  * - Set InGame_Panel active or not
  * 
- * @version 0.0.2, Code optimization
+ * @version 0.0.3
+ * - Add EggPhysics_Script
  * @author S3
- * @date 2024/01/28
+ * @date 2024/01/30
 */
 
 using UnityEngine;
@@ -44,9 +45,9 @@ public class InGame_Script : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if (ecgc_Script.EndCurrentGame_Panel_EnDis())
+            if (ecgc_Script.EndCurrentGame_Panel_IsOn())
                 ecgc_Script.EndCurrentGameCancel();
-            else if (grc_Script.GetGameResult_Panel_EnDis())
+            else if (grc_Script.GetGameResult_Panel_IsOn())
                 grc_Script.CheckGameResult();
             else
                 ecgc_Script.ShowEndCurrentGame_Panel();

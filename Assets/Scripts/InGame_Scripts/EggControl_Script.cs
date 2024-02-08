@@ -18,7 +18,7 @@ using UnityEngine;
 public class EggControl_Script : MonoBehaviour
 {
     private int initialEggNumber;
-    private List<GameObject>[] eggs = new List<GameObject>[2];
+    public List<GameObject>[] eggs = new List<GameObject>[2];
 
     private GameObject BlackEgg_Prefab, WhiteEgg_Prefab;
 
@@ -85,11 +85,11 @@ public class EggControl_Script : MonoBehaviour
             for (int i = 0; i < initialEggNumber; i++)
             {
                 GameObject newBlackEgg = Instantiate(BlackEgg_Prefab, blackSpawnLocations[i], Quaternion.identity);
-                newBlackEgg.GetComponent<Egg_Script>().SetEggColor(false);
+                newBlackEgg.GetComponent<Egg_Script>().SetEgg(false);
                 eggs[0].Add(newBlackEgg);
 
                 GameObject newWhiteEgg = Instantiate(WhiteEgg_Prefab, whiteSpawnLocations[i], Quaternion.identity);
-                newWhiteEgg.GetComponent<Egg_Script>().SetEggColor(true);
+                newWhiteEgg.GetComponent<Egg_Script>().SetEgg(true);
                 eggs[1].Add(newWhiteEgg);
             }
         }

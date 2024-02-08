@@ -91,7 +91,7 @@ public class GameResultControl_Script : MonoBehaviour
      * 
      * @return true or false
      */
-    public bool GetGameResult_Panel_EnDis()
+    public bool GetGameResult_Panel_IsOn()
     {
         return GameResult_Panel.activeSelf;
     }
