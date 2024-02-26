@@ -10413,9 +10413,9 @@ MonoBehaviour:
   m_MaxConnectAttempts: 60
   m_DisconnectTimeoutMS: 30000
   ConnectionData:
-    Address: 192.168.0.222
+    Address: 127.0.0.1
     Port: 4771
-    ServerListenAddress: 192.168.0.222
+    ServerListenAddress: 127.0.0.1
   DebugSimulator:
     PacketDelayMS: 0
     PacketJitterMS: 0
@@ -10437,7 +10437,8 @@ MonoBehaviour:
     NetworkTransport: {fileID: 1732632726}
     PlayerPrefab: {fileID: 0}
     Prefabs:
-      NetworkPrefabsLists: []
+      NetworkPrefabsLists:
+      - {fileID: 11400000, guid: 884baac252ab61a468fa5280144587ec, type: 2}
     TickRate: 30
     ClientConnectionBufferTimeout: 10
     ConnectionApproval: 0

@@ -78,7 +78,6 @@ public class JoinConnectingStatus_Script : NetworkBehaviour
     public IEnumerator ConnectingToHost(string hostIp)
     {
         trans.ConnectionData.Address = hostIp;
-        trans.ConnectionData.ServerListenAddress = hostIp;
         net.StartClient();
 
         string joinIp = "";
