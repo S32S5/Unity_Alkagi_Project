@@ -1,5 +1,5 @@
 {
-    "initialEggNumber": 2,
+    "initialEggNumber": 4,
     "firstTurn": false,
     "turnTimeLimit": "15"
 }

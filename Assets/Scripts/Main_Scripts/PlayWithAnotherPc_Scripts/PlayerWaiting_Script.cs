@@ -12,6 +12,7 @@ using System.Net;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
+using Unity.Netcode.Transports.UTP;
 
 public class PlayerWaiting_Script : MonoBehaviour
 {
@@ -65,6 +66,16 @@ public class PlayerWaiting_Script : MonoBehaviour
             cancelOkButton.SetActive(true);
             cancelOkButtonText.text = "√Îº“";
             netManager.SetActive(true);
+
+            string ipStr = "";
+            var host = Dns.GetHostEntry(Dns.GetHostName());
+            foreach (var ip in host.AddressList)
+            {
+                if (ip.AddressFamily == AddressFamily.InterNetwork)
+                    ipStr = ip.ToString();
+            }
+
+            netManager.GetComponent<UnityTransport>().ConnectionData.ServerListenAddress = ipStr;
             net.StartHost();
             StartCoroutine(ConnectingToJoin());
         }
