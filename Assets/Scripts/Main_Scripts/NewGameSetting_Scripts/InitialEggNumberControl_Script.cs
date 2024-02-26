@@ -1,15 +1,10 @@
 /**
  * Manages related to InitialEggNumber
  * 
- * Script Explanation
- * - Updates text of initialEggNumber
- * - Decreases, increases initialEggNumber
- * - Return initialEggNumber
- * 
- * @version 0.0.3
- * - Load initial initialEggNumber from json file
+ * @version 0.0.4
+ * - Code optimization
  * @author S3
- * @date 2024/02/07
+ * @date 2024/02/20
 */
 
 using UnityEngine;
@@ -17,57 +12,52 @@ using UnityEngine.UI;
 
 public class InitialEggNumberControl_Script : MonoBehaviour
 {
-    private int initialEggNumber;
+    private Text settedText;
 
-    private Text InitialEggNumberSettedNumber_Text;
-    private Button InitialEggNumberDecrease_Button, InitialEggNumberIncrease_Button;
+    private int eggNumber;
 
     // Specifies
     private void Awake()
     {
-        InitialEggNumberSettedNumber_Text = GameObject.Find("InitialEggSettedNumber_Text").GetComponent<Text>();
-
-        InitialEggNumberDecrease_Button = GameObject.Find("InitialEggNumberDecrease_Button").GetComponent<Button>();
-        InitialEggNumberDecrease_Button.onClick.AddListener(() =>
-        {
-            if (initialEggNumber != 1)
-            {
-                initialEggNumber--;
-                UpdateInitialEggSettedNumber_Text();
-            }
-        });
-        InitialEggNumberIncrease_Button = GameObject.Find("InitialEggNumberIncrease_Button").GetComponent<Button>();
-        InitialEggNumberIncrease_Button.onClick.AddListener(() =>
-        {
-            if (initialEggNumber != 7)
-            {
-                initialEggNumber++;
-                UpdateInitialEggSettedNumber_Text();
-            }
-        });
+        settedText = GameObject.Find("InitialEggSettedNumber_Text").GetComponent<Text>();
     }
 
-    // Specifies when game start
+    // Initialize eggNumber when game start
     private void Start()
     {
-        initialEggNumber = GetComponent<InitialSettingVariable_Script>().GetInitialEggNumber();
-        UpdateInitialEggSettedNumber_Text();
+        eggNumber = GetComponent<InitialSettingVariable_Script>().GetEggNum();
+        UpdateSettedNumberText();
     }
 
-    // Update text of InitialEggNumberSettedNumber_Text
-    private void UpdateInitialEggSettedNumber_Text()
+    // Update text of settedNumberText
+    private void UpdateSettedNumberText()
     {
-        GetComponent<InitialSettingVariable_Script>().SetInitialEggNumber(initialEggNumber);
-        InitialEggNumberSettedNumber_Text.text = initialEggNumber.ToString();
+        settedText.text = eggNumber.ToString();
+        GetComponent<InitialSettingVariable_Script>().SetEggNum(eggNumber);
     }
 
-    /*
-     * Get initialEggNumber
-     * 
-     * @return initialEggNumber
-     */
-    public int GetInitialEggNumber()
+    // Return eggNumber
+    // 
+    // @return int
+    public int GetEggNumber() { return eggNumber; }
+
+    // DecreaseButton onclick listener
+    public void DecreaseButtonOnClick()
     {
-        return initialEggNumber;
+        if (eggNumber != 1)
+        {
+            eggNumber--;
+            UpdateSettedNumberText();
+        }
+    }
+
+    // IncreaseButton onclick listener
+    public void IncreaseButtonOnClick()
+    {
+        if (eggNumber != 7)
+        {
+            eggNumber++;
+            UpdateSettedNumberText();
+        }
     }
 }

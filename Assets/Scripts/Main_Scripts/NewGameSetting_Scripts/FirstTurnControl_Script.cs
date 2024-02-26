@@ -2,16 +2,10 @@
  * Manages first turn
  * If firstTurn is false, black, if true, white
  * 
- * Script Explanation
- * - Updates firstTurn checkbox
- * - FirstTurn checkbox behavior
- * - Return firstTurn
- * 
- * @version 0.0.3
- * - Load initial firstTurn from json file
+ * @version 0.0.4
  * - Code opitimization
  * @author S3
- * @date 2024/02/07
+ * @date 2024/02/20
 */
 
 using UnityEngine;
@@ -19,36 +13,46 @@ using UnityEngine.UI;
 
 public class FirstTurnControl_Script : MonoBehaviour
 {
-    private Toggle BlackFirstTurn_Toggle, WhiteFirstTurn_Toggle;
+    private ToggleGroup group;
+    private Toggle BlackToggle, WhiteToggle;
+
+    private InitialSettingVariable_Script initSet;
 
     // Specifies
     private void Awake()
     {
-        BlackFirstTurn_Toggle = GameObject.Find("BlackFirstTurn_Toggle").GetComponent<Toggle>();
-        BlackFirstTurn_Toggle.onValueChanged.AddListener(delegate {
-            GetComponent<InitialSettingVariable_Script>().SetInitialFirstTurn(false);
-        });
-        WhiteFirstTurn_Toggle = GameObject.Find("WhiteFirstTurn_Toggle").GetComponent<Toggle>();
-        WhiteFirstTurn_Toggle.onValueChanged.AddListener(delegate {
-            GetComponent<InitialSettingVariable_Script>().SetInitialFirstTurn(true);
-        });
+        group = GameObject.Find("BlackWhiteFirstTurn_Panel").GetComponent<ToggleGroup>();
+        BlackToggle = GameObject.Find("BlackFirstTurn_Toggle").GetComponent<Toggle>();
+        WhiteToggle = GameObject.Find("WhiteFirstTurn_Toggle").GetComponent<Toggle>();
 
-        if (GetComponent<InitialSettingVariable_Script>().GetInitialFirstTurn())
-            WhiteFirstTurn_Toggle.isOn = true;
-        else
-            BlackFirstTurn_Toggle.isOn = true;
+        initSet = GetComponent<InitialSettingVariable_Script>();
     }
 
-    /*
-     * Get first turn
-     * 
-     * @return bool first turn
-     */
+    // Initialize first turn
+    private void Start()
+    {
+        if (!initSet.GetFirstTurn())
+            BlackToggle.isOn = true;
+        else
+            WhiteToggle.isOn = true;
+
+        group.allowSwitchOff = false;
+    }
+
+    // Get first turn
+    // 
+    // @return bool
     public bool GetFirstTurn()
     {
-        if (BlackFirstTurn_Toggle.isOn)
+        if (BlackToggle.isOn)
             return false;
         else
             return true;
     }
+
+    // BlackToggle onclick listener
+    public void BlackToggleChanged() { initSet.SetFirstTurn(false); }
+
+    // WhiteToggle onclick listener
+    public void WhiteToggleChanged() { initSet.SetFirstTurn(true); }
 }

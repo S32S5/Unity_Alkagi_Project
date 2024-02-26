@@ -1,29 +1,25 @@
 /**
  * Manages Eggs
  * 
- * Script Explanation
- * - Init eggs
- * - Return all egg is stop or not
- * - Destroy egg
- * - Clear before game eggs
- * 
- * @version 0.0.2, Code optimization
+ * @version 0.0.4 
+ * - Code optimization
  * @author S3
- * @date 2024/01/28
+ * @date 2024/02/18
 */
 
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
-public class EggControl_Script : MonoBehaviour
+public class EggControl_Script : NetworkBehaviour
 {
-    private int initialEggNumber;
+    private int eggNumber;
+
+    private GameObject black, white;
     public List<GameObject>[] eggs = new List<GameObject>[2];
 
-    private GameObject BlackEgg_Prefab, WhiteEgg_Prefab;
-
-    public InGame_Script ig_Script;
-    public GameResultControl_Script grc_Script;
+    private InGame_Script inGame;
+    private GameResultControl_Script result;
 
     // Specifies
     private void Awake()
@@ -31,115 +27,94 @@ public class EggControl_Script : MonoBehaviour
         for(int i = 0; i < 2; i++)
             eggs[i] = new List<GameObject> ();
 
-        BlackEgg_Prefab = Resources.Load<GameObject>("Prefabs/BlackEgg_Prefab");
-        WhiteEgg_Prefab = Resources.Load<GameObject>("Prefabs/WhiteEgg_Prefab");
-    }
+        black = Resources.Load<GameObject>("Prefabs/BlackEgg_Prefab");
+        white = Resources.Load<GameObject>("Prefabs/WhiteEgg_Prefab");
 
-    // Specifies when game start
-    private void Start()
-    {
-        ig_Script = GetComponent<InGame_Script>();
-        grc_Script = GetComponent<GameResultControl_Script>();
+        inGame = GetComponent<InGame_Script>();
+        result = GameObject.Find("GameResult_Panel").GetComponent<GameResultControl_Script>();
     }
 
     // Check a list where the number of eggs is 0
     private void Update()
     {
-        if (ig_Script.playGame)
+        if (inGame.playGame)
         {
             if (eggs[0].Count == 0 || eggs[1].Count == 0)
             {
-                ig_Script.playGame = false;
-                grc_Script.ShowGameResult();
+                inGame.playGame = false;
+                result.ShowGameResult();
             }
         }
     }
 
-    /*
-     * Init eggs
-     * 
-     * @param int initialEggNumber
-     */
-    public void InitEggs(int initialEggNumber)
+    // Init eggs
+    // 
+    // @param int
+    public void InitEggs(int eggNumber)
     {
-        this.initialEggNumber = initialEggNumber;
+        this.eggNumber = eggNumber;
 
-        void ClearBeforeGameEggs()
-        { 
-            for(int i = 0; i < 2; i++)
-            {
-                foreach (GameObject egg in eggs[i])
-                    Destroy(egg);
-
-                eggs[i].Clear();
-            }
-        }
-        ClearBeforeGameEggs();
-
-        void SpawnEggs()
+        for (int i = 0; i < 2; i++)
         {
-            List<Vector2> blackSpawnLocations = SetEggsSpawnLocation(1);
-            List<Vector2> whiteSpawnLocations = SetEggsSpawnLocation(-1);
+            foreach (GameObject egg in eggs[i])
+                Destroy(egg);
 
-            // Spawns Eggs
-            for (int i = 0; i < initialEggNumber; i++)
-            {
-                GameObject newBlackEgg = Instantiate(BlackEgg_Prefab, blackSpawnLocations[i], Quaternion.identity);
-                newBlackEgg.GetComponent<Egg_Script>().SetEgg(false);
-                eggs[0].Add(newBlackEgg);
-
-                GameObject newWhiteEgg = Instantiate(WhiteEgg_Prefab, whiteSpawnLocations[i], Quaternion.identity);
-                newWhiteEgg.GetComponent<Egg_Script>().SetEgg(true);
-                eggs[1].Add(newWhiteEgg);
-            }
+            eggs[i].Clear();
         }
-        SpawnEggs();
+
+        List<Vector2> blackLocations = SetEggLocations(1);
+        List<Vector2> whiteLocations = SetEggLocations(-1);
+        for (int i = 0; i < eggNumber; i++)
+        {
+            GameObject newBlack = Instantiate(black, blackLocations[i], Quaternion.identity);
+            newBlack.GetComponent<Egg_Script>().SetEgg(false);
+            eggs[0].Add(newBlack);
+
+            GameObject newWhite = Instantiate(white, whiteLocations[i], Quaternion.identity);
+            newWhite.GetComponent<Egg_Script>().SetEgg(true);
+            eggs[1].Add(newWhite);
+        }
     }
 
-    /*
-     * Set the spawn location of eggs
-     * 
-     * @param int color-1 if black, -1 if white-
-     * @return spawn location's list
-     */
-    private List<Vector2> SetEggsSpawnLocation(int color)
+    // Set the spawn location of eggs
+    // 
+    // @param int color-1 if black, -1 if white-
+    // @return spawn location's list
+    private List<Vector2> SetEggLocations(int color)
     {
-        List<Vector2> spawnLocations = new List<Vector2>();
-
-        if (initialEggNumber % 2 == 1)
+        List<Vector2> eggLocations = new List<Vector2>();
+        if (eggNumber % 2 == 1)
         {
-            spawnLocations.Add(new Vector3(0, -2.25f * color, 0));
+            eggLocations.Add(new Vector3(0, -2.25f * color, 0));
 
-            spawnLocations.Add(new Vector3(-2.25f, -2.25f * color, 0));
-            spawnLocations.Add(new Vector3(2.25f, -2.25f * color, 0));
+            eggLocations.Add(new Vector3(-2.25f, -2.25f * color, 0));
+            eggLocations.Add(new Vector3(2.25f, -2.25f * color, 0));
 
-            spawnLocations.Add(new Vector3(-3.375f, -3.375f * color, 0));
-            spawnLocations.Add(new Vector3(3.375f, -3.375f * color, 0));
+            eggLocations.Add(new Vector3(-3.375f, -3.375f * color, 0));
+            eggLocations.Add(new Vector3(3.375f, -3.375f * color, 0));
 
-            spawnLocations.Add(new Vector3(-1.125f, -3.375f * color, 0));
-            spawnLocations.Add(new Vector3(1.125f, -3.375f * color, 0));
+            eggLocations.Add(new Vector3(-1.125f, -3.375f * color, 0));
+            eggLocations.Add(new Vector3(1.125f, -3.375f * color, 0));
         }
         else
         {
-            spawnLocations.Add(new Vector3(-1.125f, -3.375f * color, 0));
-            spawnLocations.Add(new Vector3(1.125f, -3.375f * color, 0));
+            eggLocations.Add(new Vector3(-1.125f, -3.375f * color, 0));
+            eggLocations.Add(new Vector3(1.125f, -3.375f * color, 0));
 
-            spawnLocations.Add(new Vector3(-3.375f, -3.375f * color, 0));
-            spawnLocations.Add(new Vector3(3.375f, -3.375f * color, 0));
+            eggLocations.Add(new Vector3(-3.375f, -3.375f * color, 0));
+            eggLocations.Add(new Vector3(3.375f, -3.375f * color, 0));
 
-            spawnLocations.Add(new Vector3(-2.25f, -2.25f * color, 0));
-            spawnLocations.Add(new Vector3(2.25f, -2.25f * color, 0));
+            eggLocations.Add(new Vector3(-2.25f, -2.25f * color, 0));
+            eggLocations.Add(new Vector3(2.25f, -2.25f * color, 0));
         }
 
-        return spawnLocations;
+        return eggLocations;
     }
 
-    /*
-     * Return All eggs is stop
-     * 
-     * @return bool true or false
-     */
-    public bool GetAllEggsStop()
+    // Return all eggs are stop
+    // 
+    // @return bool
+    public bool GetAllStop()
     {
         bool allStop = true;
 
@@ -153,11 +128,9 @@ public class EggControl_Script : MonoBehaviour
         return allStop;
     }
 
-    /*
-     * Destroy egg
-     * 
-     * @param bool color, GameObject egg
-     */
+    // Destroy egg
+    // 
+    // @param bool, GameObject
     public void DestroyEgg(bool color, GameObject egg)
     {
         if (color)
@@ -168,12 +141,10 @@ public class EggControl_Script : MonoBehaviour
         Destroy(egg);
     }
 
-    /*
-     * Return egg number in list
-     * 
-     * @param bool color
-     * @return int egg number
-     */
+    // Return egg number in list
+    //
+    // @param bool color
+    // @return int egg number
     public int GetEggsCount(bool color)
     {
         if(color)

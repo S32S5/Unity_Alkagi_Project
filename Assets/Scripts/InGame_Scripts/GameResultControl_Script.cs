@@ -1,98 +1,117 @@
 /**
  * Manages to related game result
  * 
- * Script Explanation
- * - Show game result
- * - Return GetGameResult_Panel is active
- * 
- * @version 0.0.2
+ * @version 0.0.4
  *  - Code optimization
  * @author S3
- * @date 2023/12/8
+ * @date 2024/02/18
 */
 
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class GameResultControl_Script : MonoBehaviour
 {
-    private GameObject GameResult_Panel;
+    private GameObject panel;
+    private Text blackWinLose, whiteWinLose;
+    private Text blackScore, whiteScore;
+    private Button checkcButton;
 
-    private Text BlackWinLose_Text, WhiteWinLose_Text;
-    private Text BlackScore_Text, WhiteScore_Text;
+    private InGame_Script inGame;
+    private EggControl_Script egg;
+    private EndCurrentGameControl_Script endGame;
+    private PlayerWaiting_Script player;
+    private JoinWaiting_Script join;
 
-    private Button GameResultCheck_Button;
-
-    private EggControl_Script ec_Script;
-    private EndCurrentGameControl_Script ecgc_Script;
+    private GameObject netManager;
+    private NetworkManager net;
 
     // Specifies
     private void Awake()
     {
-        GameResult_Panel = GameObject.Find("GameResult_Panel");
-        BlackWinLose_Text = GameObject.Find("BlackWinLose_Text").GetComponent<Text>();
-        BlackScore_Text = GameObject.Find("BlackScore_Text").GetComponent<Text>();
-        WhiteWinLose_Text = GameObject.Find("WhiteWinLose_Text").GetComponent<Text>();
-        WhiteScore_Text = GameObject.Find("WhiteScore_Text").GetComponent<Text>();
+        panel = GameObject.Find("GameResult_Panel");
+        blackWinLose = GameObject.Find("BlackWinLose_Text").GetComponent<Text>();
+        whiteWinLose = GameObject.Find("WhiteWinLose_Text").GetComponent<Text>();
+        blackScore = GameObject.Find("BlackScore_Text").GetComponent<Text>();
+        whiteScore = GameObject.Find("WhiteScore_Text").GetComponent<Text>();
 
-        GameResultCheck_Button = GameObject.Find("GameResultCheck_Button").GetComponent<Button>();
+        checkcButton = GameObject.Find("GameResultCheck_Button").GetComponent<Button>();
+
+        inGame = GameObject.Find("InGame_Panel").GetComponent<InGame_Script>();
+        egg = GameObject.Find("InGame_Panel").GetComponent<EggControl_Script>();
+        endGame = GameObject.Find("EndCurrentGame_Panel").GetComponent<EndCurrentGameControl_Script>();
+        player = GameObject.Find("PlayerWaiting_Panel").GetComponent<PlayerWaiting_Script>();
+        join = GameObject.Find("JoinWaiting_Panel").GetComponent<JoinWaiting_Script>();
+
+        netManager = GameObject.Find("NetworkManager");
+        net = netManager.GetComponent<NetworkManager>();
     }
 
     // Specifies when game start
     private void Start()
     {
-        GameResultCheck_Button.GetComponent<Button>().onClick.AddListener(CheckGameResult);
+        checkcButton.GetComponent<Button>().onClick.AddListener(CheckGameResult);
 
-        ec_Script = GetComponent<EggControl_Script>();
-        ecgc_Script = GetComponent<EndCurrentGameControl_Script>();
+        panel.SetActive(false);
     }
 
-    // Init
-    public void Init()
+    // Esc
+    private void Update()
     {
-        GameResult_Panel.SetActive(false);
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (panel.activeSelf)
+                CheckGameResult();
+        }
     }
 
     // Show game result
     public void ShowGameResult()
     {
-        if(ec_Script.GetEggsCount(true) == 0)
+        if(egg.GetEggsCount(true) == 0)
         {
-            BlackWinLose_Text.GetComponent<Text>().text = "½Â";
-            BlackWinLose_Text.GetComponent<Text>().color = Color.red;
+            blackWinLose.GetComponent<Text>().text = "½Â";
+            blackWinLose.GetComponent<Text>().color = Color.red;
 
-            WhiteWinLose_Text.GetComponent<Text>().text = "ÆÐ";
-            WhiteWinLose_Text.GetComponent<Text>().color = Color.blue;
+            whiteWinLose.GetComponent<Text>().text = "ÆÐ";
+            whiteWinLose.GetComponent<Text>().color = Color.blue;
         }
         else
         {
-            BlackWinLose_Text.GetComponent<Text>().text = "ÆÐ";
-            BlackWinLose_Text.GetComponent<Text>().color = Color.blue;
+            blackWinLose.GetComponent<Text>().text = "ÆÐ";
+            blackWinLose.GetComponent<Text>().color = Color.blue;
 
-            WhiteWinLose_Text.GetComponent<Text>().text = "½Â";
-            WhiteWinLose_Text.GetComponent<Text>().color = Color.red;
+            whiteWinLose.GetComponent<Text>().text = "½Â";
+            whiteWinLose.GetComponent<Text>().color = Color.red;
         }
 
-        BlackScore_Text.GetComponent<Text>().text = ec_Script.GetEggsCount(false).ToString();
-        WhiteScore_Text.GetComponent<Text>().text = ec_Script.GetEggsCount(true).ToString();
+        blackScore.GetComponent<Text>().text = egg.GetEggsCount(false).ToString();
+        whiteScore.GetComponent<Text>().text = egg.GetEggsCount(true).ToString();
 
-        GameResult_Panel.SetActive(true);
+        panel.SetActive(true);
+
+        if (inGame.GetGameMode() == 1)
+        {
+            if (net.IsHost)
+                player.SetPanel(false);
+            else
+                join.SetPanel(false);
+            
+            net.Shutdown();
+            netManager.SetActive(false);
+        }
     }
 
     // Check game result
     public void CheckGameResult()
     {
-        GameResult_Panel.SetActive(false);
-        ecgc_Script.EndCurrentGame();
+        panel.SetActive(false);
+        endGame.EndGame();
     }
 
-    /*
-     * Get GameResult_Panel activeSelf
-     * 
-     * @return true or false
-     */
-    public bool GetGameResult_Panel_IsOn()
-    {
-        return GameResult_Panel.activeSelf;
-    }
+    // Get GameResult_Panel is active
+    //
+    // @return bool
+    public bool GetPanelIsOn() { return panel.activeSelf; }
 }

@@ -39,14 +39,14 @@ public class Egg_Script : MonoBehaviour
     // Specifies when game start
     private void Start()
     {
-        EggPhysics_Script ep_Script = GameObject.Find("InGame_Canvas").GetComponent<EggPhysics_Script>();
+        EggPhysics_Script ep_Script = GameObject.Find("InGame_Panel").GetComponent<EggPhysics_Script>();
         maxPower = ep_Script.GetMaxPower();
         rb.mass = ep_Script.GetMass();
         rb.drag = ep_Script.GetLinearDrag();
     }
 
     // Action while the egg is moving
-    IEnumerator EggIsMoving()
+    public IEnumerator EggIsMoving()
     {
         while (rb.velocity != Vector2.zero)
         {
@@ -56,7 +56,7 @@ public class Egg_Script : MonoBehaviour
             float eggY = transform.position.y;
 
             if (eggX >= panOut || eggX <= -panOut || eggY >= panOut || eggY <= -panOut)
-                GameObject.Find("InGame_Canvas").GetComponent<EggControl_Script>().DestroyEgg(colorBool, gameObject);
+                GameObject.Find("InGame_Panel").GetComponent<EggControl_Script>().DestroyEgg(colorBool, gameObject);
 
             yield return null;
         }

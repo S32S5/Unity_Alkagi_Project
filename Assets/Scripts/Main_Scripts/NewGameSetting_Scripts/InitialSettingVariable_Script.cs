@@ -1,13 +1,10 @@
 /**
  * Manage InitialSettingVariable
  * 
- * Script Explanation
- * - return initial eggnumber, firstTurn and turnTimeLimit
- * 
- * @version 0.0.3
- * - New script
+ * @version 0.0.4
+ * - Code optimization
  * @author S3
- * @date 2024/02/07
+ * @date 2024/02/20
 */
 
 using System;
@@ -22,7 +19,7 @@ public class InitialSettingVariable_Script : MonoBehaviour
     // Load json file
     private void Awake()
     {
-        isvPath = Path.Combine(Application.persistentDataPath + "/InitialSettingVariable.json");
+        isvPath = Path.Combine(Application.dataPath + "/InitialSettingVariable.json");
         if (!File.Exists(isvPath))
         {
             isv = new InitialSettingVariable();
@@ -39,66 +36,45 @@ public class InitialSettingVariable_Script : MonoBehaviour
         }
     }
 
-    /*
-     * Return initialEggNumber
-     * 
-     * @return int isv.initialEggNumber
-     */
-    public int GetInitialEggNumber()
-    {
-        return isv.initialEggNumber;
-    }
+    // Return initialEggNumber
+    // 
+    // @return int
+    public int GetEggNum() { return isv.initialEggNumber; }
 
-    /*
-     * Return InitialFirstTurn
-     * 
-     * @return bool isv.firstTurn
-     */
-    public bool GetInitialFirstTurn()
+    // Set initialEggNumber
+    // 
+    // @param int
+    public void SetEggNum(int eggNum)
     {
-        return isv.firstTurn;
-    }
-
-    /*
-     * Return InitialTurnTimeLimit
-     * 
-     * @return string isv.turnTimeLimit
-     */
-    public string GetInitialTurnTimeLimit()
-    {
-        return isv.turnTimeLimit;
-    }
-
-    /*
-     * Set initialEggNumber
-     * 
-     * @param int initialEggNumber
-     */
-    public void SetInitialEggNumber(int initialEggNumber)
-    {
-        isv.initialEggNumber = initialEggNumber;
+        isv.initialEggNumber = eggNum;
         isvToJson();
     }
 
-    /*
-     * Set firstTurn
-     * 
-     * @param bool firstTurn
-     */
-    public void SetInitialFirstTurn(bool firstTurn)
+    // Return InitialFirstTurn
+    // 
+    // @return bool
+    public bool GetFirstTurn() { return isv.firstTurn; }
+
+    // Set firstTurn
+    // 
+    // @param bool firstTurn
+    public void SetFirstTurn(bool firstTurn)
     {
         isv.firstTurn = firstTurn;
         isvToJson();
     }
 
-    /*
-     * Set turnTimeLimit
-     * 
-     * @param string turnTimeLimit
-     */
-    public void SetInitialTurnTimeLimit(string turnTimeLimit)
+    // Return InitialTurnTimeLimit
+    //
+    // @return string
+    public string GetTimeLimit() { return isv.turnTimeLimit; }
+
+    // Set turnTimeLimit
+    // 
+    // @param string
+    public void SetTimeLimit(string timeLimit)
     {
-        isv.turnTimeLimit = turnTimeLimit;
+        isv.turnTimeLimit = timeLimit;
         isvToJson();
     }
 

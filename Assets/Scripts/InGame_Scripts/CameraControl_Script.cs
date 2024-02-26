@@ -1,45 +1,41 @@
 /**
  * Controls camera
  * 
- * Script Explanation
- * - Rotate camera using mouse
- * - Init camera
- * - Update camera rotation
- * 
- * @version 0.1, Code optimization
+ * @version 0.4
+ * - Code optimization
  * @author S3
- * @date 2024/01/28
+ * @date 2024/02/18
 */
 
 using UnityEngine;
 
 public class CameraControl_Script : MonoBehaviour
 {
-    private Camera Main_Camera;
+    private Camera cam;
 
-    private InGame_Script ig_Script;
-    private TurnControl_Script tc_Script;
+    private InGame_Script inGame;
+    private TurnControl_Script turn;
 
-    private Vector3 mousePosition1, mousePosition2;
+    private Vector3 mouse1, mouse2;
     private RaycastHit2D hit;
-    private static float cameraRotationSpeed = 0.05f;
+    private static float camRotationSpeed = 0.05f;
 
     // Specifies
     private void Awake()
     {
-        Main_Camera = GameObject.Find("Main_Camera").GetComponent<Camera>();
+        cam = GameObject.Find("Main_Camera").GetComponent<Camera>();
     }
 
     // Specifies when game start
     private void Start()
     {
-        ig_Script = GetComponent<InGame_Script>();
-        tc_Script = GetComponent<TurnControl_Script>();
+        inGame = GetComponent<InGame_Script>();
+        turn = GetComponent<TurnControl_Script>();
     }
 
     private void Update()
     {
-        if (ig_Script.playGame && !tc_Script.GetTurnEnd())
+        if (inGame.playGame && !turn.GetTurnEnd())
         {
             IfMouseButtonDown();
             IfMouseButtonClick();
@@ -51,9 +47,9 @@ public class CameraControl_Script : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            mousePosition1 = Main_Camera.ScreenToWorldPoint(Input.mousePosition);
-            hit = Physics2D.Raycast(mousePosition1, transform.forward, 10);
-            mousePosition1 = Main_Camera.WorldToScreenPoint(mousePosition1);
+            mouse1 = cam.ScreenToWorldPoint(Input.mousePosition);
+            hit = Physics2D.Raycast(mouse1, transform.forward, 10);
+            mouse1 = cam.WorldToScreenPoint(mouse1);
         }
     }
 
@@ -64,84 +60,31 @@ public class CameraControl_Script : MonoBehaviour
         {
             if (!hit)
             {
-                mousePosition2 = Input.mousePosition;
+                mouse2 = Input.mousePosition;
 
                 float z = 0;
-                if (mousePosition1.x > 640 && mousePosition1.y > 360)
-                    z = ((mousePosition2.x - mousePosition1.x) + (mousePosition1.y - mousePosition2.y)) * cameraRotationSpeed;
-                else if (mousePosition1.x < 640 && mousePosition1.y > 360)
-                    z = ((mousePosition2.x - mousePosition1.x) + (mousePosition2.y - mousePosition1.y)) * cameraRotationSpeed;
-                else if (mousePosition1.x < 640 && mousePosition1.y < 360)
-                    z = ((mousePosition1.x - mousePosition2.x) + (mousePosition2.y - mousePosition1.y)) * cameraRotationSpeed;
+                if (mouse1.x > 640 && mouse1.y > 360)
+                    z = ((mouse2.x - mouse1.x) + (mouse1.y - mouse2.y)) * camRotationSpeed;
+                else if (mouse1.x < 640 && mouse1.y > 360)
+                    z = ((mouse2.x - mouse1.x) + (mouse2.y - mouse1.y)) * camRotationSpeed;
+                else if (mouse1.x < 640 && mouse1.y < 360)
+                    z = ((mouse1.x - mouse2.x) + (mouse2.y - mouse1.y)) * camRotationSpeed;
                 else
-                    z = ((mousePosition1.x - mousePosition2.x) + (mousePosition1.y - mousePosition2.y)) * cameraRotationSpeed;
+                    z = ((mouse1.x - mouse2.x) + (mouse1.y - mouse2.y)) * camRotationSpeed;
 
-                Main_Camera.transform.Rotate(0, 0, z);
-                mousePosition1 = mousePosition2;
+                cam.transform.Rotate(0, 0, z);
+                mouse1 = mouse2;
             }
         }
     }
 
-    /*
-     * Init camera
-     * 
-     * @param int z
-     */
-    public void InitCamera(int z)
-    {
-        Main_Camera.transform.rotation = Quaternion.Euler(0, 0, z);
-    }
-
-    /*
-     * Rotate camera to targetAngle
-     * 
-     * @param float 180 or 360
-     */
-    public void UpdateCameraRotation(float targetAngle)
-    {
-        if (targetAngle == 180)
-        {
-            float plusMinus = Mathf.Sign(180 - Main_Camera.transform.eulerAngles.z);
-            Main_Camera.transform.Rotate(0, 0, plusMinus * 35 * Time.deltaTime);
-
-            if (plusMinus > 0)
-            {
-                if(Main_Camera.transform.eulerAngles.z >= targetAngle)
-                {
-                    Main_Camera.transform.rotation = Quaternion.Euler(0, 0, 180);
-                    tc_Script.SetTurn(true);
-                }
-            }
-            else
-            {
-                if (Main_Camera.transform.eulerAngles.z <= targetAngle)
-                {
-                    Main_Camera.transform.rotation = Quaternion.Euler(0, 0, 180);
-                    tc_Script.SetTurn(true);
-                }
-            }
-        }
+    // Set camera
+    // 
+    // @param bool
+    public void SetCam(bool turn) { 
+        if(!turn)
+            cam.transform.rotation = Quaternion.Euler(0, 0, 0);
         else
-        {
-            float plusMinus = Mathf.Sign(Main_Camera.transform.eulerAngles.z - 180);
-            Main_Camera.transform.Rotate(0, 0, plusMinus * 35 * Time.deltaTime);
-
-            if (plusMinus > 0)
-            {
-                if (Main_Camera.transform.eulerAngles.z < 180 && Main_Camera.transform.eulerAngles.z >= 0)
-                {
-                    Main_Camera.transform.rotation = Quaternion.Euler(0, 0, 0);
-                    tc_Script.SetTurn(false);
-                }
-            }
-            else
-            {
-                if (Main_Camera.transform.eulerAngles.z > 180)
-                {
-                    Main_Camera.transform.rotation = Quaternion.Euler(0, 0, 0);
-                    tc_Script.SetTurn(false);
-                }
-            }
-        }
+            cam.transform.rotation = Quaternion.Euler(0, 0, 180);
     }
 }

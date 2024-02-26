@@ -1,76 +1,90 @@
 /**
  * Manages related to EndCurrentGame
  * 
- * Script Explanation
- * - End current game
- * - Return EndCurrentGame_Panel is active
- * 
- * @version 0.3
- * - Changed to move to main when the game ends
+ * @version 0.0.4
+ * - Code optimization
  * @author S3
- * @date 2023/02/21
+ * @date 2024/02/26
 */
 
+using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class EndCurrentGameControl_Script : MonoBehaviour
+public class EndCurrentGameControl_Script : NetworkBehaviour
 {
-    private GameObject EndCurrentGame_Panel;
-    private Button EndCurrentGameYes_Button, EndCurrentGameNo_Button;
+    private Scene_Director_Script director;
+    private InGame_Script inGame;
+    private HostJoin_Script hostJoin;
+    private PlayerWaiting_Script player;
+    private JoinWaiting_Script join;
 
-    private InGame_Script ig_Script;
+    private GameObject netManager;
+    private NetworkManager net;
 
     // Specifies
     private void Awake()
     {
-        EndCurrentGame_Panel = GameObject.Find("EndCurrentGame_Panel");
-        EndCurrentGameYes_Button = GameObject.Find("EndCurrentGameYes_Button").GetComponent<Button>();
-        EndCurrentGameNo_Button = GameObject.Find("EndCurrentGameNo_Button").GetComponent<Button>();
+        director = GameObject.Find("Scene_Director").GetComponent<Scene_Director_Script>();
+        inGame = GameObject.Find("InGame_Panel").GetComponent<InGame_Script>();
+        hostJoin = GameObject.Find("HostJoin_Panel").GetComponent<HostJoin_Script>();
+        player = GameObject.Find("PlayerWaiting_Panel").GetComponent<PlayerWaiting_Script>();
+        join = GameObject.Find("JoinWaiting_Panel").GetComponent<JoinWaiting_Script>();
+
+        netManager = GameObject.Find("NetworkManager");
+        net = GameObject.Find("NetworkManager").GetComponent<NetworkManager>();
     }
 
-    // Specifies when game start
-    private void Start()
+    // Esc
+    private void Update()
     {
-        EndCurrentGameYes_Button.GetComponent<Button>().onClick.AddListener(EndCurrentGame);
-        EndCurrentGameNo_Button.GetComponent<Button>().onClick.AddListener(EndCurrentGameCancel);
-
-        ig_Script = GetComponent<InGame_Script>();
+        if (Input.GetKeyDown(KeyCode.Escape))
+            CancelEndGame();
     }
 
-    // Init
-    public void Init()
-    {
-        EndCurrentGame_Panel.SetActive(false);
-    }
+    // Panel set on off
+    //
+    // @param bool
+    public void SetPanel(bool OnOff) { gameObject.SetActive(OnOff); }
 
-    // Show EndCurrentGame_Panel
-    public void ShowEndCurrentGame_Panel()
-    {
-        ig_Script.playGame = false;
-        EndCurrentGame_Panel.SetActive(true);
-    }
+    // Return EndCurrentGame_Panel is active
+    // 
+    // @return bool
+    public bool GetPanelIsOn() { return gameObject.activeSelf; }
 
     // End current game
-    public void EndCurrentGame()
+    public void EndGame()
     {
-        GameObject.Find("Scene_Director").GetComponent<Scene_Director_Script>().MainOn();
+        if (inGame.GetGameMode() == 1)
+        {
+            net.Shutdown();
+            netManager.SetActive(false);
+
+            if (net.IsHost)
+                player.SetPanel(false);
+            else
+                join.SetPanel(false);
+
+            hostJoin.SetPanel();
+        }
+
+        gameObject.SetActive(false);
+        director.MainOn();
     }
 
     // End current game cancel
-    public void EndCurrentGameCancel()
+    public void CancelEndGame()
     {
-        ig_Script.playGame = true;
-        EndCurrentGame_Panel.SetActive(false);
-    }
+        if (inGame.GetGameMode() == 1)
+        {
+            using FastBufferWriter writer = new FastBufferWriter(256, Unity.Collections.Allocator.Temp);
+            writer.WriteValueSafe(0);
+            if (net.IsHost)
+                NetworkManager.Singleton.CustomMessagingManager.SendNamedMessage("pauseGame", net.ConnectedClientsIds[1], writer, NetworkDelivery.Reliable);
+            else
+                NetworkManager.Singleton.CustomMessagingManager.SendNamedMessage("pauseGame", OwnerClientId, writer, NetworkDelivery.Reliable);
+        }
 
-    /*
-     * Return EndCurrentGame_Panel is active
-     * 
-     * @return bool EndCurrentGame_Panel.activeSelf
-     */
-    public bool EndCurrentGame_Panel_IsOn()
-    {
-        return EndCurrentGame_Panel.activeSelf;
+        inGame.playGame = true;
+        gameObject.SetActive(false);
     }
 }

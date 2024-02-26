@@ -1,9 +1,10 @@
 /**
  * Manages related to game resolution
  * 
- * @version 0.0.3, New script
+ * @version 0.0.3
+ * - Delete 1024, 768 scale
  * @author S3
- * @date 2024/02/07
+ * @date 2024/02/22
 */
 
 using System.Collections.Generic;
@@ -16,9 +17,9 @@ public class GameResolution_Script : MonoBehaviour
     private Button GameResolution_Button;
     private GameObject GrChoice_Panel;
     private GameObject Gr_Button_Prefab;
-    private Button[] grButtons = new Button[4];
+    private Button[] grButtons = new Button[3];
 
-    private static List<int[]> gameResolutions = new List<int[]> { new int[2] { 1024, 768 }, new int[2] { 1280, 720 }, new int[2] { 1600, 900 }, new int[2] { 1920, 1080 } };
+    private static List<int[]> gameResolutions = new List<int[]> { new int[2] { 1280, 720 }, new int[2] { 1600, 900 }, new int[2] { 1920, 1080 } };
 
     private PreferencesData_Script pd_Script;
 
@@ -32,16 +33,16 @@ public class GameResolution_Script : MonoBehaviour
         GameResolution_Button = GameObject.Find("GameResolution_Button").GetComponent<Button>();
         GrChoice_Panel = GameObject.Find("GrChoice_Panel");
         Gr_Button_Prefab = Resources.Load<GameObject>("Prefabs/Gr_Button_Prefab");
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < 3; i++)
         {
             int temp = i; // Duplicated and used due to closure issues
             string grText = gameResolutions[temp][0].ToString() + "x" + gameResolutions[temp][1].ToString();
 
-            grButtons[temp] = Instantiate(Gr_Button_Prefab, GameObject.Find("GrChoice_Panel").transform).GetComponent<Button>();
+            grButtons[temp] = Instantiate(Gr_Button_Prefab, GrChoice_Panel.transform).GetComponent<Button>();
             grButtons[temp].GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 52.5f -35 * temp);
             grButtons[temp].transform.Find("Gr_Button_Prefab_Text").GetComponent<Text>().text = grText;
             grButtons[temp].onClick.AddListener(() => {
-                Screen.SetResolution(gameResolutions[temp][0], gameResolutions[temp][1], false);
+                Screen.SetResolution(gameResolutions[temp][0], gameResolutions[temp][1], Screen.fullScreen);
                 pd_Script.SetGameResolution(temp);
                 GameResolution_Text.text = grText;
                 GrChoice_Panel.SetActive(false);
