@@ -48,7 +48,7 @@ public class InGamePanelController : NetworkBehaviour, Panel
     {
         EscListener();
 
-        if (canvas.GetGameMode() == 2 && !result.GetPanelIsOn())
+        if (canvas.GetGameMode() == 1 && !result.GetPanelIsOn())
         {
             if (net.IsHost && net.ConnectedClients.Count != 2 || !net.IsConnectedClient)
                 GameDisconnected();
@@ -74,7 +74,7 @@ public class InGamePanelController : NetworkBehaviour, Panel
             {
                 end.SetPanel(true);
 
-                if (canvas.GetGameMode() == 2)
+                if (canvas.GetGameMode() == 1)
                     SendPauseMessage();
             }
         }

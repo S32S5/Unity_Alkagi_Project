@@ -34,7 +34,7 @@ public class EndGameController : NetworkBehaviour, Panel
     {
         EscListener();
 
-        if(inGame.GetGameMode() == 2)
+        if(inGame.GetGameMode() == 1)
             if (net.IsHost && net.ConnectedClients.Count != 2 || !net.IsConnectedClient)
                 CancelEndGame();
     }
@@ -58,7 +58,7 @@ public class EndGameController : NetworkBehaviour, Panel
     {
         director.Main();
 
-        if (inGame.GetGameMode() == 2)
+        if (inGame.GetGameMode() == 1)
             ShutDownNet();
     }
 
@@ -68,7 +68,7 @@ public class EndGameController : NetworkBehaviour, Panel
         inGame.SetPlayGame(true);
         gameObject.SetActive(false);
 
-        if (inGame.GetGameMode() == 2)
+        if (inGame.GetGameMode() == 1)
             SendCancelMessage();
     }
 

@@ -13,21 +13,19 @@ using UnityEngine;
 
 public class NewGameSettingController : MonoBehaviour, Panel
 {
-    MainPanelController main;
-    PlayWithAiController ai;
-    PlayerWaitingController player;
+    private int gameMode;
 
-    InGameCanvasController inGame;
+    MainPanelController main;
+    PlayerWaitingController player;
+    InitialSettingDataController data;
 
     NetworkManager net;
 
     private void Awake()
     {
         main = GameObject.Find("MainPanel").GetComponent<MainPanelController>();
-        ai = GameObject.Find("PlayWithAiPanel").GetComponent<PlayWithAiController>();
         player = GameObject.Find("PlayerWaitingPanel").GetComponent<PlayerWaitingController>();
-
-        inGame = GameObject.Find("InGameCanvas").GetComponent <InGameCanvasController>();
+        data = GameObject.Find("NewGameSettingPanel").GetComponent<InitialSettingDataController>();
 
         net = GameObject.Find("NetworkManager").GetComponent<NetworkManager>();
     }
@@ -36,11 +34,11 @@ public class NewGameSettingController : MonoBehaviour, Panel
     {
         EscListener();
 
-        if (inGame.GetGameMode() == 2 && net.ConnectedClientsIds.Count != 2)
+        if (gameMode == 1 && net.ConnectedClientsIds.Count != 2)
             JoinDisconnected();
     }
 
-    public void Init() {}
+    public void Init() { gameMode = data.GetGameMode(); }
 
     public void SetPanel(bool OnOff) 
     { 
@@ -58,11 +56,9 @@ public class NewGameSettingController : MonoBehaviour, Panel
         {
             gameObject.SetActive(false);
 
-            if (inGame.GetGameMode() == 0)
-                ai.SetPanel(true);
-            else if (inGame.GetGameMode() == 1)
+            if (gameMode == 0)
                 main.SetPanel(true);
-            else if (inGame.GetGameMode() == 2)
+            else if (gameMode == 1)
                 player.SetPanel(false);
         }
     }
