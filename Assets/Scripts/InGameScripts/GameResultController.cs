@@ -85,7 +85,7 @@ public class GameResultController : MonoBehaviour, Panel
         blackScore.GetComponent<Text>().text = egg.GetEggsCount(false).ToString();
         whiteScore.GetComponent<Text>().text = egg.GetEggsCount(true).ToString();
 
-        if (inGame.GetGameMode() == 1)
+        if (inGame.GetGameMode() == 2)
             ShutDownNet();
     }
 

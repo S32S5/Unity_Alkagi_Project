@@ -90,7 +90,7 @@ public class TurnController : MonoBehaviour
                 DisplaysCurrentTurn();
                 timeLimitTxt.text = currentTimeLimit.ToString();
 
-                if (inGame.GetGameMode() == 0)
+                if (inGame.GetGameMode() == 1)
                     GetComponent<CameraController>().SetCam(turn);
 
                 turnEnd = false;

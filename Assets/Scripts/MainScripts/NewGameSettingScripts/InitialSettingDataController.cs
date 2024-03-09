@@ -1,11 +1,10 @@
 /**
  * Control initialSettingData
  * 
- * @version 1.0.0
- * - Change class name InitialSettingVariable_Script to InitialSettingDataController
- * - Code optimization
+ * @version 1.1.0
+ * - Delete gameMode
  * @author S3
- * @date 2024/03/08
+ * @date 2024/03/09
 */
 
 using System;
@@ -28,20 +27,6 @@ public class InitialSettingDataController : MonoBehaviour
         string jsonStr = File.ReadAllText(path);
         data = JsonUtility.FromJson<InitialSettingData>(jsonStr);
     }
-
-    // Set gameMode
-    // 
-    // @param int
-    public void SetGameMode(int gameMode)
-    {
-        data.gameMode = gameMode;
-        DataToJson();
-    }
-
-    // Return gameMode
-    // 
-    // @return int
-    public int GetGameMode() { return data.gameMode; }
 
     // Set eggNum
     // 
@@ -95,7 +80,6 @@ public class InitialSettingDataController : MonoBehaviour
 [Serializable]
 class InitialSettingData
 {
-    public int gameMode;
     public int eggNum;
     public bool firstTurn;
     public string timeLimit;

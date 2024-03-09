@@ -27,6 +27,8 @@ public class JoinConnectingStatusController : NetworkBehaviour, Panel
     SceneDirector director;
     HostIpInputController ipInput;
 
+    InGameCanvasController inGame;
+
     InitialSettingDataController data;
 
     GameObject netManager;
@@ -40,6 +42,8 @@ public class JoinConnectingStatusController : NetworkBehaviour, Panel
 
         ipInput = GameObject.Find("HostIpInputPanel").GetComponent<HostIpInputController>();
         director = GameObject.Find("SceneDirector").GetComponent<SceneDirector>();
+
+        inGame = GameObject.Find("InGameCanvas").GetComponent<InGameCanvasController>();
 
         data = GameObject.Find("NewGameSettingPanel").GetComponent<InitialSettingDataController>();
 
@@ -175,7 +179,7 @@ public class JoinConnectingStatusController : NetworkBehaviour, Panel
     private void GameStart()
     {
         string[] gameSettingSplit = gameSetting.Split(" ");
-        data.SetGameMode(1);
+        inGame.SetGameMode(2);
         data.SetEggNum(int.Parse(gameSettingSplit[0]));
         data.SetFirstTurn(Convert.ToBoolean(gameSettingSplit[1]));
         data.SetTimeLimit(gameSettingSplit[2]);
