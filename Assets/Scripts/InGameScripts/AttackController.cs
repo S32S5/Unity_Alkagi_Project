@@ -59,7 +59,7 @@ public class AttackController : NetworkBehaviour
             {
                 if (hit.transform.GetComponent<Egg>().GetColor() == turn.GetTurn())
                 {
-                    if (inGame.GetGameMode() == 1)
+                    if (inGame.GetGameMode() == 2)
                         if (manager.IsHost && turn.GetTurn() == true || !manager.IsHost && turn.GetTurn() == false)
                             return;
 
@@ -138,7 +138,7 @@ public class AttackController : NetworkBehaviour
                 float powerGagePercentage = powerGageSize / powerGageMax;
                 hit.transform.gameObject.GetComponent<Egg>().SetEggVelocity(powerGagePercentage);
 
-                if (inGame.GetGameMode() == 1)
+                if (inGame.GetGameMode() == 2)
                 {
                     string velStr = "";
                     int attackIndex;

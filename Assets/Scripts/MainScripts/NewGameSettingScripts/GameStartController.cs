@@ -15,6 +15,7 @@ public class GameStartController : MonoBehaviour
 {
     SceneDirector director;
     NewGameSettingController newGame;
+    InGameCanvasController inGame;
 
     InitialSettingDataController data;
 
@@ -24,6 +25,7 @@ public class GameStartController : MonoBehaviour
     {
         director = GameObject.Find("SceneDirector").GetComponent<SceneDirector>();
         newGame = GameObject.Find("NewGameSettingPanel").GetComponent<NewGameSettingController>();
+        inGame = GameObject.Find("InGameCanvas").GetComponent <InGameCanvasController>();
 
         data = GameObject.Find("NewGameSettingPanel").GetComponent<InitialSettingDataController>();
 
@@ -34,7 +36,7 @@ public class GameStartController : MonoBehaviour
     {
         director.InGame();
 
-        if (data.GetGameMode() == 1)
+        if (inGame.GetGameMode() == 2)
         {
             newGame.SetPanel(false);
             SendGameSettingData();

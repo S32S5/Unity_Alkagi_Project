@@ -14,6 +14,8 @@ public class InGameCanvasController : MonoBehaviour, Canvas
     private int gameMode;
     private bool playGame;
 
+    NewGameSettingController newGame;
+
     EndGameController end;
     PauseGameController pause;
     DisconnectedController disconnected;
@@ -28,6 +30,8 @@ public class InGameCanvasController : MonoBehaviour, Canvas
 
     private void Awake()
     {
+        newGame = GameObject.Find("NewGameSettingPanel").GetComponent<NewGameSettingController>();
+
         end = GameObject.Find("EndGamePanel").GetComponent<EndGameController>();
         pause = GameObject.Find("PauseGamePanel").GetComponent<PauseGameController>();
         disconnected = GameObject.Find("DisconnectedPanel").GetComponent<DisconnectedController>();
@@ -70,13 +74,12 @@ public class InGameCanvasController : MonoBehaviour, Canvas
     // Set new game
     private void SetGame()
     {
-        gameMode = data.GetGameMode();
         egg.Init(data.GetEggNum());
         turn.Init(data.GetFirstTurn(), int.Parse(data.GetTimeLimit()));
 
-        if (gameMode == 0)
+        if (gameMode == 1)
             cam.SetCam(data.GetFirstTurn());
-        else if (gameMode == 1)
+        else if (gameMode == 2)
         {
             if (net.IsHost)
                 cam.SetCam(false);
@@ -86,6 +89,11 @@ public class InGameCanvasController : MonoBehaviour, Canvas
 
         playGame = true;
     }
+
+    // Set gameMode
+    //
+    // @param int
+    public void SetGameMode(int gameMode) { this.gameMode = gameMode; }
 
     // Return gameMode
     //
