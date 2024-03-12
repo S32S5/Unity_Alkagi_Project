@@ -15,13 +15,13 @@ public class TurnTimeLimitControl_Script : MonoBehaviour
 {
     InputField input;
 
-    InitialSettingDataController data;
+    GameSettingDataController data;
 
     private void Awake()
     {
         input = GameObject.Find("TurnTimeLimitInputField").GetComponent<InputField>();
 
-        data = GameObject.Find("NewGameSettingPanel").GetComponent<InitialSettingDataController>();
+        data = GameObject.Find("SceneDirector").GetComponent<GameSettingDataController>();
     }
 
     // Init when game start

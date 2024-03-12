@@ -32,7 +32,7 @@ public class GameResultController : MonoBehaviour, Panel
         whiteScore = GameObject.Find("WhiteScoreText").GetComponent<Text>();
 
         inGame = GameObject.Find("InGameCanvas").GetComponent<InGameCanvasController>();
-        egg = GameObject.Find("InGameCanvas").GetComponent<EggController>();
+        egg = GameObject.Find("InGamePanel").GetComponent<EggController>();
         endGame = GameObject.Find("EndGamePanel").GetComponent<EndGameController>();
 
         netManager = GameObject.Find("NetworkManager");

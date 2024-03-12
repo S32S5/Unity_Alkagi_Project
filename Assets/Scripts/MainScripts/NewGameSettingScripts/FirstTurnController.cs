@@ -17,7 +17,7 @@ public class FirstTurnControl_Script : MonoBehaviour
     ToggleGroup group;
     Toggle black, white;
 
-    InitialSettingDataController data;
+    GameSettingDataController data;
 
     private void Awake()
     {
@@ -25,7 +25,7 @@ public class FirstTurnControl_Script : MonoBehaviour
         black = GameObject.Find("BlackFirstTurnToggle").GetComponent<Toggle>();
         white = GameObject.Find("WhiteFirstTurnToggle").GetComponent<Toggle>();
 
-        data = GameObject.Find("NewGameSettingPanel").GetComponent<InitialSettingDataController>();
+        data = GameObject.Find("SceneDirector").GetComponent<GameSettingDataController>();
     }
 
     // Init when game start

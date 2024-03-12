@@ -1,31 +1,32 @@
 /**
- * Control initialSettingData
+ * Control game setting data
  * 
  * @version 1.1.0
+ * - Change class name InitialSettingDataController to GameSettingDataController
  * - Delete gameMode
  * @author S3
- * @date 2024/03/09
+ * @date 2024/03/10
 */
 
 using System;
 using System.IO;
 using UnityEngine;
 
-public class InitialSettingDataController : MonoBehaviour
+public class GameSettingDataController : MonoBehaviour
 {
-    private InitialSettingData data;
+    private GameSettingData data;
     private string path;
 
     private void Awake()
     {
-        path = Path.Combine(Application.dataPath + "/InitialSettingData.json");
+        path = Path.Combine(Application.dataPath + "/GameSettingData.json");
         LoadData();
     }
 
     private void LoadData()
     {
         string jsonStr = File.ReadAllText(path);
-        data = JsonUtility.FromJson<InitialSettingData>(jsonStr);
+        data = JsonUtility.FromJson<GameSettingData>(jsonStr);
     }
 
     // Set eggNum
@@ -78,7 +79,7 @@ public class InitialSettingDataController : MonoBehaviour
 }
 
 [Serializable]
-class InitialSettingData
+class GameSettingData
 {
     public int eggNum;
     public bool firstTurn;

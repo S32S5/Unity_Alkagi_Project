@@ -87,7 +87,7 @@ Library: C:\Users\User\Documents\O1I0\Project\Unity_Alkagi_Project\Temp\BurstOut
 --assembly-defines=System.Xml;
 --assembly-defines=System;
 --assembly-defines=mscorlib;
---linker-options=PdbAltPath="Unity_Alkagi_Project_Data/Plugins/x86_64/lib_burst_generated.pdb"
+--linker-options=PdbAltPath="Alkagi Game_Data/Plugins/x86_64/lib_burst_generated.pdb"
 --generate-link-xml=Temp\burst.link.xml
 --temp-folder=C:\Users\User\Documents\O1I0\Project\Unity_Alkagi_Project\Temp\Burst
 --key-folder=C:/Program Files/Unity/Hub/Editor/2022.3.16f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport
@@ -276,7 +276,7 @@ Library: C:\Users\User\Documents\O1I0\Project\Unity_Alkagi_Project\Temp\BurstOut
 --assembly-defines=System.Xml;
 --assembly-defines=System;
 --assembly-defines=mscorlib;
---linker-options=PdbAltPath="Unity_Alkagi_Project_Data/Plugins/x86_64/lib_burst_generated.pdb"
+--linker-options=PdbAltPath="Alkagi Game_Data/Plugins/x86_64/lib_burst_generated.pdb"
 --generate-link-xml=Temp\burst.link.xml
 --temp-folder=C:\Users\User\Documents\O1I0\Project\Unity_Alkagi_Project\Temp\Burst
 --key-folder=C:/Program Files/Unity/Hub/Editor/2022.3.16f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport

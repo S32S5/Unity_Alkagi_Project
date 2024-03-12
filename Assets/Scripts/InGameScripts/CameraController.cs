@@ -8,25 +8,34 @@
  * @date 2024/03/07
 */
 
+using Unity.Netcode;
 using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
     Camera cam;
 
-    InGameCanvasController inGame;
-    TurnController turn;
-
     private Vector3 mouse1, mouse2;
     private RaycastHit2D hit;
     private static float camRotationSpeed = 0.05f;
+
+    InGameCanvasController inGame;
+    TurnController turn;
+
+    GameSettingDataController data;
+
+    NetworkManager net;
 
     private void Awake() 
     { 
         cam = GameObject.Find("MainCamera").GetComponent<Camera>();
 
-        inGame = GetComponent<InGameCanvasController>();
+        inGame = GameObject.Find("InGameCanvas").GetComponent<InGameCanvasController>();
         turn = GetComponent<TurnController>();
+
+        data = GameObject.Find("SceneDirector").GetComponent<GameSettingDataController>();
+
+        net = GameObject.Find("NetworkManager").GetComponent<NetworkManager>();
     }
 
     private void Update()
@@ -35,6 +44,21 @@ public class CameraController : MonoBehaviour
         {
             IfMouseButtonDown();
             IfMouseButtonClick();
+        }
+    }
+
+    public void Init()
+    {
+        if (inGame.GetGameMode() == 0)
+            SetCam(false);
+        else if (inGame.GetGameMode() == 1)
+            SetCam(data.GetFirstTurn());
+        else if (inGame.GetGameMode() == 2)
+        {
+            if (net.IsHost)
+                SetCam(false);
+            else
+                SetCam(true);
         }
     }
 

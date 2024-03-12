@@ -17,7 +17,7 @@ public class GameStartController : MonoBehaviour
     NewGameSettingController newGame;
     InGameCanvasController inGame;
 
-    InitialSettingDataController data;
+    GameSettingDataController data;
 
     NetworkManager net;
 
@@ -27,7 +27,7 @@ public class GameStartController : MonoBehaviour
         newGame = GameObject.Find("NewGameSettingPanel").GetComponent<NewGameSettingController>();
         inGame = GameObject.Find("InGameCanvas").GetComponent <InGameCanvasController>();
 
-        data = GameObject.Find("NewGameSettingPanel").GetComponent<InitialSettingDataController>();
+        data = GameObject.Find("SceneDirector").GetComponent<GameSettingDataController>();
 
         net = GameObject.Find("NetworkManager").GetComponent<NetworkManager>();
     }

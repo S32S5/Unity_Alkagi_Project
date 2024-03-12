@@ -1,57 +1,38 @@
 /**
  * Control inGame panel and variables
  * 
- * @version 1.0.0, new class
+ * @version 1.1.0
+ * - Add aiLevel
+ * - Move SetGame to panel
+ * - Code optimization
  * @author S3
- * @date 2024/03/09
+ * @date 2024/03/10
 */
 
-using Unity.Netcode;
 using UnityEngine;
 
 public class InGameCanvasController : MonoBehaviour, Canvas
 {
     private int gameMode;
+    private int aiLevel;
     private bool playGame;
-
-    NewGameSettingController newGame;
 
     EndGameController end;
     PauseGameController pause;
     DisconnectedController disconnected;
     GameResultController result;
-
-    InitialSettingDataController data;
-    EggController egg;
-    TurnController turn;
-    CameraController cam;
-
-    NetworkManager net;
+    InGamePanelController panel;
 
     private void Awake()
     {
-        newGame = GameObject.Find("NewGameSettingPanel").GetComponent<NewGameSettingController>();
-
         end = GameObject.Find("EndGamePanel").GetComponent<EndGameController>();
         pause = GameObject.Find("PauseGamePanel").GetComponent<PauseGameController>();
         disconnected = GameObject.Find("DisconnectedPanel").GetComponent<DisconnectedController>();
         result = GameObject.Find("GameResultPanel").GetComponent<GameResultController>();
-
-        data = GameObject.Find("NewGameSettingPanel").GetComponent<InitialSettingDataController>();
-        egg = GetComponent<EggController>();
-        turn = GetComponent<TurnController>();
-        cam = GetComponent<CameraController>();
-
-        net = GameObject.Find("NetworkManager").GetComponent<NetworkManager>();
+        panel = GameObject.Find("InGamePanel").GetComponent<InGamePanelController>();
     }
 
-    private void Update()
-    {
-        if(end.GetPanelIsOn() || pause.GetPanelIsOn() || disconnected.GetPanelIsOn() || result.GetPanelIsOn())
-            playGame = false;
-        else
-            playGame = true;
-    }
+    private void Update() { SetPlayGame(); }
 
     public void Init()
     {
@@ -59,8 +40,7 @@ public class InGameCanvasController : MonoBehaviour, Canvas
         pause.SetPanel(false);
         disconnected.SetPanel(false);
         result.SetPanel(false);
-
-        SetGame();
+        panel.SetPanel(true);
     }
 
     public void SetCanvas(bool OnOff) 
@@ -71,24 +51,19 @@ public class InGameCanvasController : MonoBehaviour, Canvas
             Init();
     }
 
-    // Set new game
-    private void SetGame()
+    // Play game set false if end or pause or disconnected or result, else set true 
+    public void SetPlayGame() 
     {
-        egg.Init(data.GetEggNum());
-        turn.Init(data.GetFirstTurn(), int.Parse(data.GetTimeLimit()));
-
-        if (gameMode == 1)
-            cam.SetCam(data.GetFirstTurn());
-        else if (gameMode == 2)
-        {
-            if (net.IsHost)
-                cam.SetCam(false);
-            else
-                cam.SetCam(true);
-        }
-
-        playGame = true;
+        if (end.GetPanelIsOn() || pause.GetPanelIsOn() || disconnected.GetPanelIsOn() || result.GetPanelIsOn())
+            playGame = false;
+        else
+            playGame = true;
     }
+
+    // Return playGame
+    //
+    // @return bool
+    public bool GetPlayGame() { return playGame; }
 
     // Set gameMode
     //
@@ -100,13 +75,13 @@ public class InGameCanvasController : MonoBehaviour, Canvas
     // @return int
     public int GetGameMode() { return gameMode; }
 
-    // Set playGame
+    // Set aiLevel
     //
-    // @param bool
-    public void SetPlayGame(bool OnOff) { playGame = OnOff; }
+    // @param int
+    public void SetAiLevel(int aiLevel) { this.aiLevel = aiLevel; }
 
-    // Return playGame
+    // Return aiLevel
     //
-    // @return bool
-    public bool GetPlayGame() { return playGame; }
+    // @return int
+    public int GetAiLevel() { return aiLevel; }
 }

@@ -1676,6 +1676,10 @@ GameObject:
   - component: {fileID: 381814766}
   - component: {fileID: 381814767}
   - component: {fileID: 381814770}
+  - component: {fileID: 381814776}
+  - component: {fileID: 381814775}
+  - component: {fileID: 381814774}
+  - component: {fileID: 381814773}
   - component: {fileID: 381814772}
   m_Layer: 5
   m_Name: InGamePanel
@@ -1757,6 +1761,54 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 32654a17f4e9ddc469d28bf60a6f19bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &381814773
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 381814764}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a6b949f96b06db41906ef39201ef82a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &381814774
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 381814764}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b863270ef5bef5a4ea7776bc4c371572, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &381814775
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 381814764}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9931121c84a2b174480e717937b25de3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &381814776
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 381814764}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81a2c4853080bd34ca50181b192d5c0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &385431870
@@ -6053,6 +6105,7 @@ GameObject:
   - component: {fileID: 1109656190}
   - component: {fileID: 1109656195}
   - component: {fileID: 1109656197}
+  - component: {fileID: 1109656198}
   - component: {fileID: 1109656196}
   m_Layer: 0
   m_Name: SceneDirector
@@ -6194,6 +6247,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8e4e60b5ce92d4d42b0d0da384b84b41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1109656198
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1109656188}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ab494ccb359dc94fa80f9504ddf9fd3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1111395939
@@ -10677,7 +10742,6 @@ GameObject:
   - component: {fileID: 1610233512}
   - component: {fileID: 1610233511}
   - component: {fileID: 1610233513}
-  - component: {fileID: 1610233519}
   m_Layer: 5
   m_Name: NewGameSettingPanel
   m_TagString: Untagged
@@ -10755,18 +10819,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 87c6f10c1934e0045b49bbeefcee9318, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1610233519
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1610233509}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8ab494ccb359dc94fa80f9504ddf9fd3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1613151083
@@ -13417,10 +13469,6 @@ GameObject:
   - component: {fileID: 1997618169}
   - component: {fileID: 1997618168}
   - component: {fileID: 1997618172}
-  - component: {fileID: 1997618176}
-  - component: {fileID: 1997618175}
-  - component: {fileID: 1997618174}
-  - component: {fileID: 1997618173}
   m_Layer: 5
   m_Name: InGameCanvas
   m_TagString: Untagged
@@ -13525,54 +13573,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e5661989748161a4cb6c916c0aacf943, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1997618173
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1997618167}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6a6b949f96b06db41906ef39201ef82a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1997618174
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1997618167}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b863270ef5bef5a4ea7776bc4c371572, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1997618175
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1997618167}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9931121c84a2b174480e717937b25de3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1997618176
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1997618167}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 81a2c4853080bd34ca50181b192d5c0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1998805292

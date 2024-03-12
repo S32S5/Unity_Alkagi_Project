@@ -13,24 +13,28 @@ using UnityEngine.UI;
 
 public class TurnController : MonoBehaviour
 {
-    InGameCanvasController inGame;
-
     private bool turn, turnEnd;
-    private long turnTimeLimit, currentTimeLimit;
+    private int turnTimeLimit, currentTimeLimit;
     private float secondTimer;
 
     GameObject blackTurn, whiteTurn;
     Text timeLimitTxt;
 
+    InGameCanvasController inGame;
+
+    GameSettingDataController data;
+
     GameObject powerGage;
 
     private void Awake()
     {
-        inGame = GameObject.Find("InGameCanvas").GetComponent<InGameCanvasController>();
-
         blackTurn = GameObject.Find("BlackTurnDisplayPanel");
         whiteTurn = GameObject.Find("WhiteTurnDisplayPanel");
         timeLimitTxt = GameObject.Find("CurrentTimeLimitText").GetComponent<Text>();
+
+        inGame = GameObject.Find("InGameCanvas").GetComponent<InGameCanvasController>();
+
+        data = GameObject.Find("SceneDirector").GetComponent<GameSettingDataController>();
 
         powerGage = GameObject.Find("AttackPowerGage");
     }
@@ -41,13 +45,10 @@ public class TurnController : MonoBehaviour
         TurnEndOperation();
     }
 
-    // Init
-    //
-    // @param bool, int
-    public void Init(bool turn, int turnTimeLimit)
+    public void Init()
     {
-        this.turn = turn;
-        this.turnTimeLimit = turnTimeLimit;
+        turn = data.GetFirstTurn();
+        turnTimeLimit = int.Parse(data.GetTimeLimit());
         currentTimeLimit = turnTimeLimit;
         secondTimer = Time.deltaTime;
 
@@ -112,6 +113,11 @@ public class TurnController : MonoBehaviour
     // 
     // @return bool
     public bool GetTurnEnd() { return turnEnd; }
+
+    // Return currentTimeLimit
+    //
+    // @return int
+    public int GetCurrentTimeLimit() { return currentTimeLimit; }
 
     private void DisplaysCurrentTurn()
     {

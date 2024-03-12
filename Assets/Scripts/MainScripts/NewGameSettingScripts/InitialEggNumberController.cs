@@ -17,13 +17,13 @@ public class InitialEggNumberController : MonoBehaviour
     
     Text settedText;
 
-    InitialSettingDataController data;
+    GameSettingDataController data;
 
     private void Awake() 
     { 
         settedText = GameObject.Find("InitialEggSettedNumberText").GetComponent<Text>();
 
-        data = GameObject.Find("NewGameSettingPanel").GetComponent<InitialSettingDataController>();
+        data = GameObject.Find("SceneDirector").GetComponent<GameSettingDataController>();
     }
 
     // Init when game start

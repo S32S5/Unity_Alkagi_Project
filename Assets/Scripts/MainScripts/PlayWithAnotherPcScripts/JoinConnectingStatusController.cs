@@ -29,7 +29,7 @@ public class JoinConnectingStatusController : NetworkBehaviour, Panel
 
     InGameCanvasController inGame;
 
-    InitialSettingDataController data;
+    GameSettingDataController data;
 
     GameObject netManager;
     NetworkManager net;
@@ -45,7 +45,7 @@ public class JoinConnectingStatusController : NetworkBehaviour, Panel
 
         inGame = GameObject.Find("InGameCanvas").GetComponent<InGameCanvasController>();
 
-        data = GameObject.Find("NewGameSettingPanel").GetComponent<InitialSettingDataController>();
+        data = GameObject.Find("SceneDirector").GetComponent<GameSettingDataController>();
 
         netManager = GameObject.Find("NetworkManager");
         net = netManager.GetComponent<NetworkManager>();

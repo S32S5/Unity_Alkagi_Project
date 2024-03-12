@@ -1,11 +1,10 @@
 /**
  * Control power gage
  * 
- * @version 1.0.0
- * - Change class name Attack_Script to AttackController
- * - Code optimization
+ * @version 1.1.0
+ * - Blocks white hits when in ai mode
  * @author S3
- * @date 2024/03/08
+ * @date 2024/03/09
 */
 
 using Unity.Netcode;
@@ -32,15 +31,14 @@ public class AttackController : NetworkBehaviour
 
     private void Awake()
     {
-        inGame = GameObject.Find("InGameCanvas").GetComponent<InGameCanvasController>();
-        egg = GameObject.Find("InGameCanvas").GetComponent<EggController>();
-        turn = GameObject.Find("InGameCanvas").GetComponent<TurnController>();
-
-        manager = GameObject.Find("NetworkManager").GetComponent<NetworkManager>();
-
+        powerGage = GameObject.Find("AttackPowerGage");
         cam = GameObject.Find("MainCamera").GetComponent<Camera>();
 
-        powerGage = GameObject.Find("AttackPowerGage");
+        inGame = GameObject.Find("InGameCanvas").GetComponent<InGameCanvasController>();
+        egg = GetComponent<EggController>();
+        turn = GetComponent<TurnController>();
+
+        manager = GameObject.Find("NetworkManager").GetComponent<NetworkManager>();
     }
 
     private void Start() { powerGage.SetActive(false); }
@@ -59,6 +57,9 @@ public class AttackController : NetworkBehaviour
             {
                 if (hit.transform.GetComponent<Egg>().GetColor() == turn.GetTurn())
                 {
+                    if (inGame.GetGameMode() == 0)
+                        if (hit.transform.GetComponent<Egg>().GetColor() == true)
+                            return;
                     if (inGame.GetGameMode() == 2)
                         if (manager.IsHost && turn.GetTurn() == true || !manager.IsHost && turn.GetTurn() == false)
                             return;

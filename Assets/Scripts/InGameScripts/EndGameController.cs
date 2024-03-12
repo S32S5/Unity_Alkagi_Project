@@ -15,6 +15,7 @@ public class EndGameController : NetworkBehaviour, Panel
 {
     SceneDirector director;
     InGameCanvasController inGame;
+    PlayWithAiController ai;
     PlayWithAnotherPcController anotherPc;
 
     GameObject netManager;
@@ -24,6 +25,7 @@ public class EndGameController : NetworkBehaviour, Panel
     {
         director = GameObject.Find("SceneDirector").GetComponent<SceneDirector>();
         inGame = GameObject.Find("InGameCanvas").GetComponent<InGameCanvasController>();
+        ai = GameObject.Find("PlayWithAiPanel").GetComponent<PlayWithAiController>();
         anotherPc = GameObject.Find("PlayWithAnotherPcPanel").GetComponent<PlayWithAnotherPcController>();
 
         netManager = GameObject.Find("NetworkManager");
@@ -41,9 +43,7 @@ public class EndGameController : NetworkBehaviour, Panel
 
     public void Init() { }
 
-    public void SetPanel(bool OnOff) {
-        gameObject.SetActive(OnOff);
-    }
+    public void SetPanel(bool OnOff) {gameObject.SetActive(OnOff);}
 
     public bool GetPanelIsOn() { return gameObject.activeSelf; }
 
@@ -58,6 +58,8 @@ public class EndGameController : NetworkBehaviour, Panel
     {
         director.Main();
 
+        if (inGame.GetGameMode() == 0)
+            ai.SetPanel(true);
         if (inGame.GetGameMode() == 2)
             ShutDownNet();
     }
@@ -65,11 +67,15 @@ public class EndGameController : NetworkBehaviour, Panel
     // End game cancel
     public void CancelEndGame()
     {
-        inGame.SetPlayGame(true);
         gameObject.SetActive(false);
 
         if (inGame.GetGameMode() == 2)
             SendCancelMessage();
+    }
+
+    private void SelectAiLevel()
+    {
+        
     }
 
     private void ShutDownNet()

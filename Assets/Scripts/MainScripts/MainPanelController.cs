@@ -63,21 +63,20 @@ public class MainPanelController : MonoBehaviour, Panel
 
     public void PlayWithAiButtonOnClick()
     {
-        gameObject.SetActive(false);
         inGame.SetGameMode(0);
         ai.SetPanel(true);
     }
 
     public void ThisPcButtonOnClick()
     {
-        gameObject.SetActive(false);
+        SetPanel(false);
         inGame.SetGameMode(1);
         newGame.SetPanel(true);
     }
 
     public void AnotherPcButtonOnClick()
     {
-        gameObject.SetActive(false);
+        SetPanel(false);
         inGame.SetGameMode(2);
         anotherPc.SetPanel(true);
     }

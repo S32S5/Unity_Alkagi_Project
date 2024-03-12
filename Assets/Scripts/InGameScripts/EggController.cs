@@ -21,6 +21,8 @@ public class EggController : NetworkBehaviour
     InGameCanvasController inGame;
     GameResultController result;
 
+    GameSettingDataController data;
+
     private void Awake()
     {
         black = Resources.Load<GameObject>("Prefabs/BlackEgg");
@@ -29,8 +31,10 @@ public class EggController : NetworkBehaviour
         for (int i = 0; i < 2; i++)
             eggs[i] = new List<GameObject> ();
 
-        inGame = GetComponent<InGameCanvasController>();
+        inGame = GameObject.Find("InGameCanvas").GetComponent<InGameCanvasController>();
         result = GameObject.Find("GameResultPanel").GetComponent<GameResultController>();
+
+        data = GameObject.Find("SceneDirector").GetComponent<GameSettingDataController>();
     }
 
     // Check a list where the number of eggs is 0
@@ -45,12 +49,9 @@ public class EggController : NetworkBehaviour
         }
     }
 
-    // Init
-    // 
-    // @param int
-    public void Init(int eggNum)
+    public void Init()
     {
-        this.eggNum = eggNum;
+        this.eggNum = data.GetEggNum();
 
         ClearEggs();
         SpawnEggs();
@@ -154,7 +155,7 @@ public class EggController : NetworkBehaviour
         integratedEggs.AddRange(eggs[0]);
         integratedEggs.AddRange(eggs[1]);
         foreach (GameObject egg in integratedEggs)
-            if (egg.GetComponent<Rigidbody2D>().velocity != Vector2.zero)
+            if (egg.GetComponent<Rigidbody2D>().velocity != Vector2.zero || (egg.GetComponent<Egg>().GetSavedRb() != Vector2.zero))
                 allStop = false;
 
         return allStop;

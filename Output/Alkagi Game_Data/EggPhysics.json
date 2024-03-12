@@ -1,5 +1,5 @@
 {
-    "mass": 0.25,
+    "mass": 0.0025,
     "linearDrag": 2.25,
     "maxPower": 22.5
 }
